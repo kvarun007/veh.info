@@ -4,8 +4,9 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import { useVehicleType } from "./VehicleTypeContext";
+// import { useVehicleType } from "./VehicleTypeContext";
 import { Box } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function VehicleGrid() {
 	// item tag styles- grid
@@ -18,7 +19,8 @@ export default function VehicleGrid() {
 	const [vehiclesData, setVehiclesData] = useState(null);
 
 	// Access the vehicleType from the context
-	const { vehicleType } = useVehicleType();
+	// const { vehicleType } = useVehicleType();
+	const vehicleType = useSelector((state) => state.vehicleType); // changed from context api to redux
 
 	const lastRowStartIndex = vehiclesData
 		? Math.floor(vehiclesData.length / 3) * 3

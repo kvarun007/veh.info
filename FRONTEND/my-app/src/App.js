@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { BrowserRouter, Route, Routes} from "react-router-dom";
 import Login from './components/auth/loginPage';
 import VehiclePages from './components/vehiclePage/vehiclePage';
+import { Provider } from 'react-redux';
+import store from './components/redux/reduxStore';
 
 
 
@@ -16,6 +18,7 @@ function App() {
     <>
     <BrowserRouter>
       <VehicleTypeProvider >
+      <Provider store={store} >
         <div>
           <Search />
           <Routes>
@@ -24,6 +27,7 @@ function App() {
             <Route path='/vehicles' element={<VehiclePages/>}/>
           </Routes>          
         </div>  
+        </Provider>
       </VehicleTypeProvider>  
     </BrowserRouter>
     </>
