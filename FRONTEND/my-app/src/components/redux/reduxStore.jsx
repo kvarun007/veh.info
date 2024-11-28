@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 const initialState = {
 	vehicleType: "all",
+	loginPage: "closed",
 };
 
 // Reducer function
@@ -13,6 +14,10 @@ const vehicleTypeReducer = (state = initialState, action) => {
 			return { ...state, vehicleType: "car" };
 		case "all":
 			return { ...state, vehicleType: "all" };
+		case "opened":
+			return { ...state, loginPage: "opened" };
+		case "closed":
+			return { ...state, loginPage: "closed" };
 
 		default:
 			return state;

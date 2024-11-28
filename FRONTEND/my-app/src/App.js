@@ -17,7 +17,7 @@ function App() {
   return (
     <>
     <BrowserRouter>
-      <VehicleTypeProvider >
+      {/* <VehicleTypeProvider > */}
       <Provider store={store} >
         <div>
           <Search />
@@ -25,10 +25,11 @@ function App() {
             <Route  path='/' element={<IndexPage/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path='/vehicles' element={<VehiclePages/>}/>
-          </Routes>          
+          </Routes> 
+          <Login />  
         </div>  
         </Provider>
-      </VehicleTypeProvider>  
+      {/* </VehicleTypeProvider>   */}
     </BrowserRouter>
     </>
   );

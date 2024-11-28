@@ -7,6 +7,8 @@ import Divider from "@mui/material/Divider";
 // import { useVehicleType } from "./VehicleTypeContext";
 import { Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import Login from "./auth/loginPage";
 
 export default function VehicleGrid() {
 	// item tag styles- grid
@@ -90,16 +92,18 @@ export default function VehicleGrid() {
 										<p className="font-loto text-2xl text-loto pt-2 text-left ml-6  font-semibold ">
 											{vehicle.vehicleName}
 										</p>
-										<Button
-											variant="outlined"
-											size="large w-3/4 "
-											sx={{ marginTop: "1rem", marginBottom: "1rem" }}
-											onClick={() => {
-												alert(`get the ${vehicle.vehicleName} details`);
-											}}
-										>
-											Get Details
-										</Button>
+										<Link to="/vehicles">
+											<Button
+												variant="outlined"
+												size="large w-3/4 "
+												sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+												// onClick={() => {
+												// 	alert(`get the ${vehicle.vehicleName} details`);
+												// }}
+											>
+												Get Details
+											</Button>
+										</Link>
 									</div>
 								</Item>
 							</Grid>

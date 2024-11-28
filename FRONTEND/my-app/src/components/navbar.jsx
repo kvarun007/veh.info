@@ -14,6 +14,8 @@ import { useState, useEffect, useRef } from "react";
 // import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import Modal from "@mui/material/Modal";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -138,9 +140,8 @@ export default function SearchAppBar() {
 	const [open, setOpen] = React.useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
-	const handleProfieClick = () => {
-		alert("displaying user profile by modal");
-	};
+
+	const dispatch = useDispatch();
 
 	return (
 		<Box sx={{ flexGrow: 1 }} className="">
@@ -178,10 +179,30 @@ export default function SearchAppBar() {
 						)}
 					</Search>
 					<IconButton size="large" color="inherit">
-						<AccountCircle sx={{ fontSize: 40 }} onClick={handleOpen} />
+						<AccountCircle
+							sx={{ fontSize: 40 }}
+							onClick={() => {
+								dispatch({ type: "opened" });
+							}}
+						/>
 					</IconButton>
 				</Toolbar>
 			</AppBar>
+			<Modal
+				open={open}
+				onClose={handleClose}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box>
+					<Typography id="modal-modal-title" variant="h6" component="h2">
+						Text in a modal
+					</Typography>
+					<Typography id="modal-modal-description" sx={{ mt: 2 }}>
+						Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+					</Typography>
+				</Box>
+			</Modal>
 		</Box>
 	);
 }
