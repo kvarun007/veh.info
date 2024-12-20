@@ -116,7 +116,7 @@ export default function SearchAppBar() {
 			);
 			const data = await response.json();
 			setSuggestions(data); // Assuming the API returns an array of suggestions
-			console.log(suggestions);
+			// console.log(suggestions);
 		} catch (error) {
 			console.error("Error fetching suggestions:", error);
 			setSuggestions([]);
@@ -130,9 +130,15 @@ export default function SearchAppBar() {
 
 	// Handle suggestion click
 	const handleSuggestionClick = (suggestion) => {
-		setSearchQuery(suggestion.vehicleName);
+		// console.log(suggestion.vehicleName);
+		setSearchQuery(
+			suggestion.model.includes(suggestion.make)
+				? suggestion.model
+				: suggestion.make + " " + suggestion.model
+		);
 		setSuggestions([]);
-		alert(`get the ${suggestion.vehicleName} details`); // need to redirct
+		setSearchQuery("");
+		// alert(`get the ${suggestion.model} details`); // need to redirct
 	};
 
 	//handle Profile click
@@ -169,10 +175,14 @@ export default function SearchAppBar() {
 							<SuggestionsList>
 								{suggestions.map((suggestion) => (
 									<SuggestionItem
-										key={suggestion.id}
+										key={suggestion.model}
 										onClick={() => handleSuggestionClick(suggestion)}
 									>
-										{suggestion.vehicleName}
+										<Link to={`/vehicles/${suggestion.model}`}>
+											{suggestion.model.includes(suggestion.make)
+												? suggestion.model
+												: suggestion.make + " " + suggestion.model}
+										</Link>
 									</SuggestionItem>
 								))}
 							</SuggestionsList>

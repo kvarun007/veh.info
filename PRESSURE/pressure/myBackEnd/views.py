@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .models import Vehicles
+from .models import IndiaCarDatabaseByTeoalidaFullSpecsSample
+from .models import IndiaBikeDatabase
 from django.shortcuts import get_object_or_404
+import json
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,76 +13,60 @@ from django.db.models import Q
 
 # Create your views here.
 
-def get_all_vehicels(request):
-    # return HttpResponse("hello from backend ")
-    Vehicless = Vehicles.objects.all()
-
-    # Prepare a list of dictionaries for each bike object
-    Vehicles_data = []
-    for vehicle in Vehicless:
-        Vehicles_data.append({
-            'vehicleType' : vehicle.vehicleType,
-            'vehicleName': vehicle.vehicleName,
-            'frontTyrePressure': vehicle.frontTyrePressure,
-            'backTyrePressure': vehicle.backTyrePressure,
-            'frontTyreSize': vehicle.frontTyreSize,
-            'backTyreSize': vehicle.backTyreSize,
-            'vehicleImage': vehicle.VehicleImage.url if vehicle.VehicleImage else None,
+def get_all_cars(request):
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url").exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    cars_data = []
+    for car in cars:
+        cars_data.append({
+            'make' : car['make'],
+            'model' : car['model'],
+            "image_url":car['image_url']
         })
-
-    # Return the bike data as a JSON response
-    return JsonResponse({'vehicles': Vehicles_data})
+    return JsonResponse({'cars': cars_data})
 
 
-def bike_detail(request,bike_name):
-    # bike = get_object_or_404(Bike,bikeName = bike_name)
 
-    # data ={
-    #     'bikeName': bike.bikeName,
-    #     'frontTyrePressure': bike.frontTyrePressure,
-    #     'backTyrePressure': bike.backTyrePressure,
-    #     'frontTyreSize': bike.frontTyreSize,
-    #     'backTyreSize': bike.backTyreSize,
-    #     'bikeImage': bike.bikeImage.url if bike.bikeImage else None,
-    # }
 
-    # return JsonResponse(data)
+def get_all_vehicles (request):
+    car_response = get_all_cars(request)
+    bike_response = get_all_bikes(request)
 
-    return HttpResponse("hello from backend ")
+    cars_data = json.loads(car_response.content)["cars"]
+    bikes_data = json.loads(bike_response.content)["bikes"]
+    
+    return JsonResponse({'vehicles': cars_data + bikes_data})
+
 
 
 def get_all_bikes(request):
     # return HttpResponse("dispalying all bikes ")
-    bikes = Vehicles.objects.filter(vehicleType="bike")
+    bikes = IndiaBikeDatabase.objects.values('model').distinct()
     bikes_data = []
     for bike in bikes:
+        related_bike = IndiaBikeDatabase.objects.filter(model=bike['model']).first()
         bikes_data.append({
-            'vehicleType' : bike.vehicleType,
-            'vehicleName': bike.vehicleName,
-            'frontTyrePressure': bike.frontTyrePressure,
-            'backTyrePressure': bike.backTyrePressure,
-            'frontTyreSize': bike.frontTyreSize,
-            'backTyreSize': bike.backTyreSize,
-            'vehicleImage': bike.VehicleImage.url if bike.VehicleImage else None,
+            'make': related_bike.make,
+            'model': related_bike.model,
+            'image_url': related_bike.image_url,
         })
     return JsonResponse({'bikes': bikes_data})
 
 
-def get_all_cars(request):
-    # return HttpResponse("dispalying all cars ")
-    cars = Vehicles.objects.filter(vehicleType="car")
-    cars_data = []
-    for car in cars:
-        cars_data.append({
-            'vehicleType' : car.vehicleType,
-            'vehicleName': car.vehicleName,
-            'frontTyrePressure': car.frontTyrePressure,
-            'backTyrePressure': car.backTyrePressure,
-            'frontTyreSize': car.frontTyreSize,
-            'backTyreSize': car.backTyreSize,
-            'vehicleImage': car.VehicleImage.url if car.VehicleImage else None,
-        })
-    return JsonResponse({'cars': cars_data})
+# def get_all_cars(request):
+#     # return HttpResponse("dispalying all cars ")
+#     cars = Vehicles.objects.filter(vehicleType="car")
+#     cars_data = []
+#     for car in cars:
+#         cars_data.append({
+#             'vehicleType' : car.vehicleType,
+#             'vehicleName': car.vehicleName,
+#             'frontTyrePressure': car.frontTyrePressure,
+#             'backTyrePressure': car.backTyrePressure,
+#             'frontTyreSize': car.frontTyreSize,
+#             'backTyreSize': car.backTyreSize,
+#             'vehicleImage': car.VehicleImage.url if car.VehicleImage else None,
+#         })
+#     return JsonResponse({'cars': cars_data})
 
 
 class VehicleSearchSuggestions(APIView):
@@ -88,8 +74,20 @@ class VehicleSearchSuggestions(APIView):
         query = request.GET.get('q', '').strip()
         if query:
             # Search for vehicles with vehicle_name containing the query (case insensitive)
-            vehicles = Vehicles.objects.filter(Q(vehicleName__iregex=rf'\b{query}'))[:10]  # Limit to 10 results
+            cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(Q(make__icontains=query) | Q(model__icontains=query)).values('make', 'model').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()[:10 ]  # Limit to 10 results
+            bikes = IndiaBikeDatabase.objects.filter(Q(make__icontains=query) | Q(model__icontains=query)).values('make', 'model').distinct()[:10 ]
+            
+            vehicles = [*cars, *bikes]
+            print(vehicles)
             serializer = VehicleSerializer(vehicles, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        # return Response([], status=status.HTTP_200_OK)
-        return JsonResponse({"suggestions": []}, status=status.HTTP_200_OK)
+        return Response({"suggestions": []}, status=status.HTTP_200_OK)
+        # return JsonResponse({"suggestions": []}, status=status.HTTP_200_OK)
+        
+        
+def vehicle_detail(request,vehicle_name):
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(model = vehicle_name).values()
+    bikes = IndiaBikeDatabase.objects.filter(model = vehicle_name).values()
+    vehicles = [*cars, *bikes]
+    # print(vehicles)
+    return JsonResponse({'vehicle': vehicles})

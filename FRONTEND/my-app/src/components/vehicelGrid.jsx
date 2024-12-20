@@ -32,24 +32,24 @@ export default function VehicleGrid() {
 	const fetchAllVehicles = async () => {
 		try {
 			if (vehicleType == "all") {
-				console.log(vehicleType);
+				// console.log(vehicleType);
 				const response = await fetch(
-					`http://127.0.0.1:8000/details/getallvehicels`
+					`http://127.0.0.1:8000/details/getallvehicles`
 				);
 				const result = await response.json();
 				setVehiclesData(result.vehicles);
-				console.log(result.vehicles);
+				// console.log(result.vehicles);
 			} else if (vehicleType == "car") {
-				console.log(vehicleType);
+				// console.log(vehicleType);
 				const response = await fetch(
 					`http://127.0.0.1:8000/details/getallcars`
 				);
 				const result = await response.json();
 				setVehiclesData(result.cars);
 				// setVehiclesData(null)
-				console.log(result.cars);
+				// console.log(result.cars);
 			} else if (vehicleType == "bike") {
-				console.log(vehicleType);
+				// console.log(vehicleType);
 				const response = await fetch(
 					`http://127.0.0.1:8000/details/getallbikes`
 				);
@@ -84,15 +84,17 @@ export default function VehicleGrid() {
 							<Grid item key={index} className="">
 								<Item elevation={2} className="">
 									<img
-										src={`http://127.0.0.1:8000/${vehicle.vehicleImage}`}
+										src={vehicle.image_url}
 										className="size-60 object-contain"
 									/>
 									<Divider className=" w-[100%] " variant="middle " />
 									<div className="bg-[#F9F9F9] ">
 										<p className="font-loto text-2xl text-loto pt-2 text-left ml-6  font-semibold ">
-											{vehicle.vehicleName}
+											{vehicle.model.includes(vehicle.make)
+												? vehicle.model
+												: vehicle.make + " " + vehicle.model}
 										</p>
-										<Link to="/vehicles">
+										<Link to={`/vehicles/${vehicle.model}`}>
 											<Button
 												variant="outlined"
 												size="large w-3/4 "

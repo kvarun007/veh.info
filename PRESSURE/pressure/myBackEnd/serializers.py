@@ -1,9 +1,8 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Vehicles
+from .models import IndiaCarDatabaseByTeoalidaFullSpecsSample
 
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Vehicles
-        fields = ['id', 'vehicleType', 'vehicleName', 'frontTyrePressure', 
-                  'backTyrePressure', 'frontTyreSize', 'backTyreSize', 'VehicleImage']
+        model = IndiaCarDatabaseByTeoalidaFullSpecsSample
+        fields = ['make', 'model', ]

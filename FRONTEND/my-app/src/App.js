@@ -7,7 +7,7 @@ import VehicleTypeProvider from './components/VehicleTypeContext';
 import { Link } from "react-router-dom";
 import { BrowserRouter, Route, Routes} from "react-router-dom";
 import Login from './components/auth/loginPage';
-import VehiclePages from './components/vehiclePage/vehiclePage';
+import VehiclePages from './components/secondPage/vehiclePage';
 import { Provider } from 'react-redux';
 import store from './components/redux/reduxStore';
 
@@ -19,12 +19,13 @@ function App() {
     <BrowserRouter>
       {/* <VehicleTypeProvider > */}
       <Provider store={store} >
-        <div>
+        <div className=''> //bg-[#F8F8F8]
           <Search />
           <Routes>
             <Route  path='/' element={<IndexPage/>}/>
             <Route path="/login" element={<Login/>}/>
-            <Route path='/vehicles' element={<VehiclePages/>}/>
+            {/* <Route path='/vehicles' element={<VehiclePages/>}/> */}
+            <Route path="/vehicles/:vehicleModel" element={<VehiclePages/>} />
           </Routes> 
           <Login />  
         </div>  
