@@ -2,8 +2,7 @@ import { useParams } from "react-router-dom";
 import ResponsiveAppBar from "./toolBar";
 import ImageSlider from "./imageSlider";
 import React, { useState, useEffect } from "react";
-import Specifications from "./Specifications";
-import SafetyFeatures from "./SafetyFeatures";
+import SafetyFeatures from "./safetyFeatures";
 
 export default function VehiclePages() {
 	const params = useParams();
@@ -17,19 +16,8 @@ export default function VehiclePages() {
 				`http://127.0.0.1:8000/details/${params.vehicleModel}/`
 			);
 			const result = await response.json();
-
-			// // Handle images URL and format them
-			// if (result.vehicle && result.vehicle[0]?.image_url) {
-			// 	const splittedUrls = result.vehicle[0].image_url.split(";");
-			// 	const formattedImages = splittedUrls.map((imgUrl) => ({
-			// 		url: imgUrl.trim(),
-			// 	}));
-			// 	setImages(formattedImages);
-			// }
-
 			setVehicleData(result.vehicle);
-			// Price(result.vehicle);
-			console.log(result.vehicle);
+			// console.log(result.vehicle);
 		} catch (error) {
 			console.error("Error fetching data:", error);
 		}
@@ -40,13 +28,15 @@ export default function VehiclePages() {
 	}, [params.vehicleModel]);
 
 	return (
-		<div className="mt-20 mx-20 w-80% ">
+		<div className="mt-10 mx-20 w-80% ">
 			<ResponsiveAppBar />
-			<ImageSlider vehicleData={vehicleData} />
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				<Specifications vehicleData={vehicleData} />
-				{/* <SafetyFeatures vehicleData={vehicleData} /> */}
-				{/* Add more sections like Features, Dimensions, etc., here */}
+
+			<div className="mt-10 py-8 px-4 md:px-6 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 bg-[#F9F9F9]">
+				<ImageSlider vehicleData={vehicleData} />
+			</div>
+
+			<div className="">
+				<SafetyFeatures vehicleData={vehicleData} />
 			</div>
 		</div>
 	);
