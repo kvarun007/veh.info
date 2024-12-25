@@ -3,6 +3,7 @@ import ResponsiveAppBar from "./toolBar";
 import ImageSlider from "./imageSlider";
 import React, { useState, useEffect } from "react";
 import SafetyFeatures from "./safetyFeatures";
+import Variants from "./variants";
 
 export default function VehiclePages() {
 	const params = useParams();
@@ -28,15 +29,18 @@ export default function VehiclePages() {
 	}, [params.vehicleModel]);
 
 	return (
-		<div className="mt-10 mx-20 w-80% ">
+		<div className="mt-10 mx-[5%] w-100% ">
 			<ResponsiveAppBar />
 
-			<div className="mt-10 py-8 px-4 md:px-6 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 bg-[#F9F9F9]">
+			<div className="mt-10 py-4 px-4 md:px-6 flex flex-col md:flex-row lg:flex-row space-y-6 md:space-y-0 md:space-x-1 bg-[#F9F9F9]">
 				<ImageSlider vehicleData={vehicleData} />
 			</div>
 
-			<div className="">
+			<div className=" px-2 md:px-6 bg-[#F9F9F9] ">
 				<SafetyFeatures vehicleData={vehicleData} />
+			</div>
+			<div className=" px-2 md:px-6 bg-[#F9F9F9] ">
+				<Variants vehicleData={vehicleData} />
 			</div>
 		</div>
 	);

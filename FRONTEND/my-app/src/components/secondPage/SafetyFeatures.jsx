@@ -62,7 +62,7 @@ export default function SafetyFeatures({ vehicleData }) {
 	}, [vehicleData]);
 
 	return (
-		<div className="flex-1 md:w-1/2 bg-white p-6 rounded-lg shadow-md border border-[#1976D2] space-y-4">
+		<div className="flex-1 md:w-3/4 bg-white p-6 rounded-lg shadow-md border border-[#1976D2] space-y-4">
 			{/* Airbags Section */}
 			{vehicleData && vehicleData.length > 0 ? (
 				vehicleData[0].airbags ? (
