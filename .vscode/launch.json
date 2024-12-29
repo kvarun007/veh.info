@@ -12,6 +12,19 @@
 			"django": true,
 			"autoStartBrowser": false,
 			"program": "${workspaceFolder}\\PRESSURE\\pressure\\manage.py"
+		},
+		{
+			"name": "React Frontend",
+			"type": "pwa-chrome",
+			"request": "launch",
+			"url": "http://localhost:3000",
+			"webRoot": "${workspaceFolder}/src"
+		}
+	],
+	"compounds": [
+		{
+			"name": "Debug Frontend and Backend",
+			"configurations": ["Python: Django", "React Frontend"]
 		}
 	]
 }

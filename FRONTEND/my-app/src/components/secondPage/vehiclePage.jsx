@@ -29,7 +29,7 @@ export default function VehiclePages() {
 	}, [params.vehicleModel]);
 
 	return (
-		<div className="mt-10 mx-[5%] w-100% ">
+		<div className="mt-10 mx-[5%] w-100%  bg-[#F9F9F9]">
 			<ResponsiveAppBar />
 
 			<div className="mt-10 py-4 px-4 md:px-6 flex flex-col md:flex-row lg:flex-row space-y-6 md:space-y-0 md:space-x-1 bg-[#F9F9F9]">
