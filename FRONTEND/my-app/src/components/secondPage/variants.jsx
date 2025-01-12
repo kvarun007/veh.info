@@ -22,32 +22,130 @@ export default function Variants({ vehicleData }) {
 
 	const handleTabChange = (event, newValue) => {
 		if (newValue === 0) {
-			setData(vehicleData);
+			if (selectedTransmission === "Manual") {
+				setData(
+					vehicleData.filter(
+						(item) => item.key_transmission.trim() === "Manual"
+					)
+				);
+			} else if (selectedTransmission === "Automatic") {
+				setData(
+					vehicleData.filter(
+						(item) =>
+							item.key_transmission.trim() === "AMT" ||
+							item.key_transmission.trim() === "Automatic"
+					)
+				);
+			} else {
+				setData(vehicleData);
+			}
 		} else if (newValue === 1) {
-			setData(vehicleData.filter((item) => item.fuel_type.trim() === "Petrol"));
+			if (selectedTransmission === "Manual") {
+				setData(
+					vehicleData
+						.filter((item) => item.key_transmission.trim() === "Manual")
+						.filter((item) => item.fuel_type.trim() === "Petrol")
+				);
+			} else if (selectedTransmission === "Automatic") {
+				setData(
+					vehicleData
+						.filter(
+							(item) =>
+								item.key_transmission.trim() === "AMT" ||
+								item.key_transmission.trim() === "Automatic"
+						)
+						.filter((item) => item.fuel_type.trim() === "Petrol")
+				);
+			} else {
+				setData(
+					vehicleData.filter((item) => item.fuel_type.trim() === "Petrol")
+				);
+			}
 		} else {
-			setData(vehicleData.filter((item) => item.fuel_type.trim() === "Diesel"));
+			if (selectedTransmission === "Manual") {
+				setData(
+					vehicleData
+						.filter((item) => item.key_transmission.trim() === "Manual")
+						.filter((item) => item.fuel_type.trim() === "Diesel")
+				);
+			} else if (selectedTransmission === "Automatic") {
+				setData(
+					vehicleData
+						.filter(
+							(item) =>
+								item.key_transmission.trim() === "AMT" ||
+								item.key_transmission.trim() === "Automatic"
+						)
+						.filter((item) => item.fuel_type.trim() === "Diesel")
+				);
+			} else {
+				setData(
+					vehicleData.filter((item) => item.fuel_type.trim() === "Diesel")
+				);
+			}
 		}
 		setTabValue(newValue);
 	};
 
 	const handleTransmissionChange = (event) => {
 		if (event.target.value == "Manual") {
-			setData(
-				vehicleData.filter((item) => item.key_transmission.trim() === "Manual")
-			);
+			if (tabValue === 1) {
+				setData(
+					vehicleData
+						.filter((item) => item.key_transmission.trim() === "Manual")
+						.filter((item) => item.fuel_type.trim() === "Petrol")
+				);
+			} else if (tabValue === 2) {
+				setData(
+					vehicleData
+						.filter((item) => item.key_transmission.trim() === "Manual")
+						.filter((item) => item.fuel_type.trim() === "Diesel")
+				);
+			} else {
+				setData(
+					vehicleData.filter(
+						(item) => item.key_transmission.trim() === "Manual"
+					)
+				);
+			}
 		} else if (event.target.value == "Automatic") {
-			setData(
-				vehicleData.filter((item) => item.key_transmission.trim() === "AMT")
-			);
-		} else if (event.target.value == "Automatic") {
-			setData(
-				vehicleData.filter(
-					(item) => item.key_transmission.trim() === "Automatic"
-				)
-			);
+			if (tabValue === 1) {
+				setData(
+					vehicleData
+						.filter(
+							(item) =>
+								item.key_transmission.trim() === "AMT" ||
+								item.key_transmission.trim() === "Automatic"
+						)
+						.filter((item) => item.fuel_type.trim() === "Petrol")
+				);
+			} else if (tabValue === 2) {
+				setData(
+					vehicleData
+						.filter(
+							(item) =>
+								item.key_transmission.trim() === "AMT" ||
+								item.key_transmission.trim() === "Automatic"
+						)
+						.filter((item) => item.fuel_type.trim() === "Diesel")
+				);
+			} else {
+				setData(
+					vehicleData.filter((item) => item.key_transmission.trim() === "AMT")
+				);
+			}
 		} else {
-			setData(vehicleData);
+			if (tabValue === 1) {
+				setData(
+					vehicleData.filter((item) => item.fuel_type.trim() === "Petrol")
+				);
+			} else if (tabValue === 2) {
+				setData(
+					vehicleData.filter((item) => item.fuel_type.trim() === "Diesel")
+				);
+			} else {
+				setData(vehicleData);
+			}
 		}
 		setSelectedTransmission(event.target.value);
 	};
@@ -90,7 +188,7 @@ export default function Variants({ vehicleData }) {
 
 	return (
 		<>
-			<div className="flex-1 md:w-3/4 bg-white p-6 rounded-lg shadow-md border border-[#1976D2] space-y-4 mt-4">
+			<div className="flex-1 md:w-full bg-white p-6 rounded-lg shadow-md border border-[#1976D2] space-y-4 mt-4">
 				<Box>
 					<Card className="mb-6 shadow-lg">
 						<CardContent>

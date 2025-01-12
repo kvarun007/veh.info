@@ -91,3 +91,44 @@ def vehicle_detail(request,vehicle_name):
     vehicles = [*cars, *bikes]
     # print(vehicles)
     return JsonResponse({'vehicle': vehicles})
+
+
+
+class UpdateCarDetailsView(APIView):
+    def post(self, request):
+        # Extract data from the request
+        print("cameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        vin_number = request.data.get("vin_number")
+        user_predicted_mileage = request.data.get("user_predicted_mileage")
+        car_version = request.data.get("car_version")  # Assuming you use the ID to identify the car
+        car_model = request.data.get("car_model")
+        print(vin_number)
+        print(user_predicted_mileage)
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
+        # Validate input data
+        if not car_version:
+            return Response({"error": "Car ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not vin_number and not user_predicted_mileage:
+            return Response({"error": "At least one field (vin_number or user_predicted_mileage) must be provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Fetch the car record
+            car = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.get(version=car_version, model=car_model)
+
+            # Update fields
+            if vin_number is not None:
+                car.vin_numbers = vin_number
+
+            if user_predicted_mileage is not None:
+                car.user_predicted_mileage = user_predicted_mileage
+
+            # Save changes
+            car.save()
+
+            return Response({"message": "Car details updated successfully."}, status=status.HTTP_200_OK)
+        
+        except IndiaCarDatabaseByTeoalidaFullSpecsSample.DoesNotExist:
+            return Response({"error": "Car record not found."}, status=status.HTTP_404_NOT_FOUND)
+
