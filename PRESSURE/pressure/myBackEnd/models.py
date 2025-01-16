@@ -338,6 +338,7 @@ class IndiaBikeDatabase(models.Model):
     hyderabad = models.TextField(db_column='Hyderabad', blank=True, null=True)  # Field name made lowercase.
     lucknow = models.TextField(db_column='Lucknow', blank=True, null=True)  # Field name made lowercase.
     about_model = models.TextField(db_column='About Model', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    vehicle_type = models.CharField(db_column='vehicletype',max_length=255, default="bike", null=True, blank=True)
     
 
     class Meta:
