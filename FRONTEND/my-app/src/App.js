@@ -10,12 +10,13 @@ import Login from './components/auth/loginPage';
 import VehiclePages from './components/secondPage/vehiclePage';
 import { Provider } from 'react-redux';
 import store from './components/redux/reduxStore';
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 
 function App() {
   return (
     <>
+    <GoogleOAuthProvider clientId="50814278601-6s888rfbjn1om3ntha784ikd29poiop0.apps.googleusercontent.com">
     <BrowserRouter>
       {/* <VehicleTypeProvider > */}
       <Provider store={store} >
@@ -32,6 +33,7 @@ function App() {
         </Provider>
       {/* </VehicleTypeProvider>   */}
     </BrowserRouter>
+    </GoogleOAuthProvider>
     </>
   );
 }
