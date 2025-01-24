@@ -16,6 +16,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -149,6 +152,50 @@ export default function SearchAppBar() {
 
 	const dispatch = useDispatch();
 
+	// Modal state for adding mileage
+	const [openMileageModal, setOpenMileageModal] = useState(false);
+	const [mileageInput, setMileageInput] = useState("");
+	const [vehicleType, setVehicleType] = useState(""); // "car" or "bike"
+	const [vehicleOptions, setVehicleOptions] = useState([]); // Options for selected type
+	const [selectedVehicle, setSelectedVehicle] = useState(""); // Selected vehicle
+
+	const fetchVehicleOptions = async (type) => {
+		try {
+			const endpoint =
+				type === "car"
+					? "http://127.0.0.1:8000/details/getallcarsdetails"
+					: "http://127.0.0.1:8000/details/getallbikes";
+			const response = await fetch(endpoint);
+			const data = await response.json();
+			// console.log(Object.values(data)[0]);
+			setVehicleOptions(Object.values(data)[0]); // Assume data is an array of vehicles
+		} catch (error) {
+			console.error("Error fetching vehicle options:", error);
+		}
+	};
+
+	const handleMileageSubmit = async () => {
+		// try {
+		// 	const response = await fetch("http://127.0.0.1:8000/api/vehicles/add-mileage/", {
+		// 		method: "POST",
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 		},
+		// 		body: JSON.stringify({ mileage: mileageInput }),
+		// 	});
+		// 	if (response.ok) {
+		// 		alert("Mileage added successfully!");
+		// 		setOpenMileageModal(false);
+		// 	} else {
+		// 		alert("Failed to add mileage.");
+		// 	}
+		// } catch (error) {
+		// 	console.error("Error adding mileage:", error);
+		// 	alert("An error occurred.");
+		// }
+		console.log("mil");
+	};
+
 	return (
 		<Box sx={{ flexGrow: 1 }} className="">
 			<AppBar>
@@ -161,6 +208,7 @@ export default function SearchAppBar() {
 					>
 						VEHICE.INFO
 					</Typography>
+
 					<Search ref={refSuggestionList}>
 						<SearchIconWrapper>
 							<SearchIcon />
@@ -188,6 +236,24 @@ export default function SearchAppBar() {
 							</SuggestionsList>
 						)}
 					</Search>
+
+					<IconButton
+						variant="contained"
+						color="inherit"
+						onClick={() => setOpenMileageModal(true)}
+						sx={{
+							color: "white",
+							marginLeft: "16px",
+							display: "flex",
+							alignItems: "center",
+							gap: "8px",
+						}}
+					>
+						<LocalGasStationIcon />
+						<Typography variant="button" sx={{ fontWeight: 500 }}>
+							Add Mileage
+						</Typography>
+					</IconButton>
 					<IconButton size="large" color="inherit">
 						<AccountCircle
 							sx={{ fontSize: 40 }}
@@ -198,6 +264,8 @@ export default function SearchAppBar() {
 					</IconButton>
 				</Toolbar>
 			</AppBar>
+
+			{/* user modal */}
 			<Modal
 				open={open}
 				onClose={handleClose}
@@ -211,6 +279,98 @@ export default function SearchAppBar() {
 					<Typography id="modal-modal-description" sx={{ mt: 2 }}>
 						Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
 					</Typography>
+				</Box>
+			</Modal>
+			{/* mileage submit modal */}
+
+			<Modal
+				open={openMileageModal}
+				onClose={() => setOpenMileageModal(false)}
+				aria-labelledby="add-mileage-title"
+				aria-describedby="add-mileage-description"
+			>
+				<Box
+					sx={{
+						position: "absolute",
+						top: "50%",
+						left: "50%",
+						transform: "translate(-50%, -50%)",
+						width: 400,
+						bgcolor: "background.paper",
+						boxShadow: 24,
+						p: 4,
+						borderRadius: 2,
+					}}
+				>
+					<Typography id="add-mileage-title" variant="h6">
+						Add Mileage
+					</Typography>
+
+					<TextField
+						select
+						fullWidth
+						margin="normal"
+						label="Select Vehicle Type"
+						value={vehicleType}
+						onChange={(e) => {
+							setVehicleType(e.target.value);
+							fetchVehicleOptions(e.target.value);
+						}}
+						SelectProps={{
+							native: true,
+						}}
+					>
+						<option value="">Select</option>
+						<option value="car">Car</option>
+						<option value="bike">Bike</option>
+					</TextField>
+
+					{vehicleType && (
+						<TextField
+							select
+							fullWidth
+							margin="normal"
+							label="Select Vehicle"
+							value={selectedVehicle}
+							onChange={(e) => setSelectedVehicle(e.target.value)}
+							SelectProps={{
+								native: true,
+							}}
+						>
+							<option value="">Select</option>
+							{vehicleOptions.map((option) =>
+								vehicleType === "car" ? (
+									<option key={option.version} value={option.version}>
+										{`${option.make} ${option.model} ${option.version} `}
+										{/* ${option.version} */}
+									</option>
+								) : (
+									<option key={option.version} value={option.version}>
+										{`${option.make} ${option.model} ${option.version} `}
+										{/* ${option.version} */}
+									</option>
+								)
+							)}
+						</TextField>
+					)}
+
+					{/* <TextField
+						fullWidth
+						margin="normal"
+						label="Mileage"
+						variant="outlined"
+						value={mileageInput}
+						onChange={(e) => setMileageInput(e.target.value)}
+					/>
+
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={handleMileageSubmit}
+						sx={{ mt: 2 }}
+					>
+						Submit
+					</Button> */}
 				</Box>
 			</Modal>
 		</Box>

@@ -5,9 +5,11 @@ from .views import get_all_vehicles
 from .views import vehicle_detail
 from .views import VehicleSearchSuggestions
 from .views import UpdateCarDetailsView
+from .views import get_all_cars_details
 urlpatterns = [
     path("details/getallcars",get_all_cars, name ="get_all_cars"),
     path("details/getallbikes",get_all_bikes, name = "get_all_bikes"),
+    path("details/getallcarsdetails",get_all_cars_details, name ="get_all_cars"),
     path("details/getallvehicles",get_all_vehicles, name = "get_all_vehicles"),
     path('details/<str:vehicle_name>/', vehicle_detail, name='bike_detail'),
     path('api/vehicles/search/', VehicleSearchSuggestions.as_view(), name='vehicle-search'), 

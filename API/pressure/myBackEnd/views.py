@@ -14,12 +14,24 @@ from django.db.models import Q
 # Create your views here.
 
 def get_all_cars(request):
-    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url").exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url",).exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
     cars_data = []
     for car in cars:
         cars_data.append({
             'make' : car['make'],
             'model' : car['model'],
+            "image_url":car['image_url']
+        })
+    return JsonResponse({'cars': cars_data})
+
+def get_all_cars_details(request):
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url","version").exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    cars_data = []
+    for car in cars:
+        cars_data.append({
+            'make' : car['make'],
+            'model' : car['model'],
+            'version' : car["version"],
             "image_url":car['image_url']
         })
     return JsonResponse({'cars': cars_data})
