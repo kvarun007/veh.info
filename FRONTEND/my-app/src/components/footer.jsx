@@ -6,7 +6,7 @@ export default function Footer() {
 	return (
 		<Box
 			component="footer"
-			className="bg-gray-800 text-white py-6"
+			className="bg-gray-800 text-white py-6 pl-[5%] "
 			sx={{
 				position: "static",
 				left: "0",

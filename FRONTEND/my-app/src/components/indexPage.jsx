@@ -4,16 +4,21 @@ import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import VehicleTypeButtons from "./vehicleType";
 import VehicleGrid from "./vehicelGrid";
-import Footer from "./footer";
 
 export default function IndexPage() {
 	return (
 		<>
-			<div className="relative flex justify-center">
-				<img src={bike1} className="w-full h-[32rem] " />
+			<div className="flex flex-col justify-center">
+				<div>
+					<img src={bike1} className="w-full h-[32rem] " />
+				</div>
 				<Paper
-					className="  w-[97%] max-w-[97%] min-h-[30rem]  absolute top-[450px]"
-					sx={{ bgcolor: "rgba(252,252,254, 0.99)" }}
+					className="  w-[97%] max-w-[97%] min-h-[30rem]   top-[450px]"
+					sx={{
+						bgcolor: "rgba(252,252,254, 0.99)",
+						margin: "auto",
+						marginTop: "-10vh",
+					}}
 					elevation={24}
 				>
 					<div className="font-bold mt-4 mb-4 text-2xl ml-[11%] border-red  ">
@@ -28,7 +33,7 @@ export default function IndexPage() {
 							variant="middle"
 						/>
 					</div>
-					<div>
+					<div className="">
 						<VehicleGrid className="" />
 					</div>
 				</Paper>

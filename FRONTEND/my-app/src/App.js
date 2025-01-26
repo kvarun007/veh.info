@@ -31,7 +31,7 @@ function App() {
             {/* <Route path='/vehicles' element={<VehiclePages/>}/> */}
             <Route path="/vehicles/:vehicleModel" element={<VehiclePages/>} />
           </Routes> 
-          <Footer/>
+          
           <Login /> 
           
         </div>  
@@ -39,6 +39,7 @@ function App() {
       {/* </VehicleTypeProvider>   */}
     </BrowserRouter>
     </GoogleOAuthProvider>
+    <Footer/>
     </>
   );
 }

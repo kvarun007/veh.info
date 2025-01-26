@@ -19,7 +19,6 @@ export default function VehicleGrid() {
 	}));
 
 	const [vehiclesData, setVehiclesData] = useState(null);
-	const [loading, setLoading] = React.useState(true);
 
 	// Access the vehicleType from the context
 	// const { vehicleType } = useVehicleType();
@@ -72,10 +71,10 @@ export default function VehicleGrid() {
 
 	return (
 		<>
-			<Box className="max-w-[78%] mx-auto  ">
+			<Box className="max-w-[90%] mx-auto  ">
 				<Grid
 					container
-					spacing={2}
+					spacing={5}
 					sx={{ mt: 2 }}
 					className=" mb-12 justify-center mt-1 "
 				>
@@ -112,7 +111,7 @@ export default function VehicleGrid() {
 							</Grid>
 						))
 					) : (
-						<p>Loading vehicles...</p>
+						<p>Loading vehicles...</p> // Placeholder when data is loading
 					)}
 				</Grid>
 			</Box>
