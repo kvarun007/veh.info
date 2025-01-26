@@ -19,6 +19,7 @@ export default function VehicleGrid() {
 	}));
 
 	const [vehiclesData, setVehiclesData] = useState(null);
+	const [loading, setLoading] = React.useState(true);
 
 	// Access the vehicleType from the context
 	// const { vehicleType } = useVehicleType();
@@ -111,7 +112,7 @@ export default function VehicleGrid() {
 							</Grid>
 						))
 					) : (
-						<p>Loading vehicles...</p> // Placeholder when data is loading
+						<p>Loading vehicles...</p>
 					)}
 				</Grid>
 			</Box>

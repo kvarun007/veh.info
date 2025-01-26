@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import VehicleTypeButtons from "./vehicleType";
 import VehicleGrid from "./vehicelGrid";
+import Footer from "./footer";
 
 export default function IndexPage() {
 	return (
@@ -27,7 +28,7 @@ export default function IndexPage() {
 							variant="middle"
 						/>
 					</div>
-					<div className="">
+					<div>
 						<VehicleGrid className="" />
 					</div>
 				</Paper>

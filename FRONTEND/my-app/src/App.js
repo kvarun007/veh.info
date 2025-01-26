@@ -11,6 +11,9 @@ import VehiclePages from './components/secondPage/vehiclePage';
 import { Provider } from 'react-redux';
 import store from './components/redux/reduxStore';
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Footer from "./components/footer";
+import Navbar from './components/navbar';
+
 
 
 function App() {
@@ -20,15 +23,17 @@ function App() {
     <BrowserRouter>
       {/* <VehicleTypeProvider > */}
       <Provider store={store} >
-        <div className=''> //bg-[#F8F8F8]
-          <Search />
+        <div className=''> 
+          <Navbar />
           <Routes>
             <Route  path='/' element={<IndexPage/>}/>
-            <Route path="/login" element={<Login/>}/>
+            {/* <Route path="/login" element={<Login/>}/> */}
             {/* <Route path='/vehicles' element={<VehiclePages/>}/> */}
             <Route path="/vehicles/:vehicleModel" element={<VehiclePages/>} />
           </Routes> 
-          <Login />  
+          <Footer/>
+          <Login /> 
+          
         </div>  
         </Provider>
       {/* </VehicleTypeProvider>   */}

@@ -19,13 +19,14 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
+import Footer from "./footer";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
-	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.15),
+	borderBottom: "2px solid ",
+	// backgroundColor: alpha(theme.palette.common.white, 0.15),
 	"&:hover": {
-		backgroundColor: alpha(theme.palette.common.white, 0.25),
+		// backgroundColor: alpha(theme.palette.common.white, 0.25),
 	},
 	marginLeft: 0,
 	width: "40%",
@@ -84,7 +85,7 @@ const SuggestionItem = styled("div")({
 	},
 });
 
-export default function SearchAppBar() {
+export default function Navbar() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [suggestions, setSuggestions] = useState([]);
 	const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
@@ -196,165 +197,227 @@ export default function SearchAppBar() {
 		console.log("mil");
 	};
 
+	//sticky navbar
+	// State to track whether the AppBar should have elevated styles
+	const [elevate, setElevate] = useState(false);
+
+	// Function to handle the scroll event
+	const handleScroll = () => {
+		const offset = window.scrollY; // Get the current scroll position
+		console.log();
+		setElevate(offset > 50); // Set elevate to true if scroll is greater than 50px
+	};
+
+	// Set up the scroll listener when the component mounts
+	useEffect(() => {
+		window.addEventListener("scroll", handleScroll); // Add the event listener
+		return () => window.removeEventListener("scroll", handleScroll); // Clean up
+	}, []);
+
 	return (
-		<Box sx={{ flexGrow: 1 }} className="">
-			<AppBar>
-				<Toolbar className="">
-					<Typography
-						variant="h6"
-						noWrap
-						component="div"
-						sx={{ flexGrow: 1, display: {} }}
-					>
-						VEHICE.INFO
-					</Typography>
+		<div>
+			<Box sx={{ flexGrow: 1 }} className="">
+				<AppBar
+					// position={elevate ? "sticky" : null}
 
-					<Search ref={refSuggestionList}>
-						<SearchIconWrapper>
-							<SearchIcon />
-						</SearchIconWrapper>
-						<StyledInputBase
-							value={searchQuery}
-							onChange={handleSearchChange}
-							placeholder="Search…"
-							inputProps={{ "aria-label": "search" }}
-						/>
-						{suggestions.length > 0 && (
-							<SuggestionsList>
-								{suggestions.map((suggestion) => (
-									<SuggestionItem
-										key={suggestion.model}
-										onClick={() => handleSuggestionClick(suggestion)}
-									>
-										<Link to={`/vehicles/${suggestion.model}`}>
-											{suggestion.model.includes(suggestion.make)
-												? suggestion.model
-												: suggestion.make + " " + suggestion.model}
-										</Link>
-									</SuggestionItem>
-								))}
-							</SuggestionsList>
-						)}
-					</Search>
-
-					<IconButton
-						variant="contained"
-						color="inherit"
-						onClick={() => setOpenMileageModal(true)}
-						sx={{
-							color: "white",
-							marginLeft: "16px",
-							display: "flex",
-							alignItems: "center",
-							gap: "8px",
-						}}
-					>
-						<LocalGasStationIcon />
-						<Typography variant="button" sx={{ fontWeight: 500 }}>
-							Add Mileage
-						</Typography>
-					</IconButton>
-					<IconButton size="large" color="inherit">
-						<AccountCircle
-							sx={{ fontSize: 40 }}
-							onClick={() => {
-								dispatch({ type: "opened" });
-							}}
-						/>
-					</IconButton>
-				</Toolbar>
-			</AppBar>
-
-			{/* user modal */}
-			<Modal
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description"
-			>
-				<Box>
-					<Typography id="modal-modal-title" variant="h6" component="h2">
-						Text in a modal
-					</Typography>
-					<Typography id="modal-modal-description" sx={{ mt: 2 }}>
-						Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-					</Typography>
-				</Box>
-			</Modal>
-			{/* mileage submit modal */}
-
-			<Modal
-				open={openMileageModal}
-				onClose={() => setOpenMileageModal(false)}
-				aria-labelledby="add-mileage-title"
-				aria-describedby="add-mileage-description"
-			>
-				<Box
 					sx={{
-						position: "absolute",
-						top: "50%",
-						left: "50%",
-						transform: "translate(-50%, -50%)",
-						width: 400,
-						bgcolor: "background.paper",
-						boxShadow: 24,
-						p: 4,
-						borderRadius: 2,
+						backgroundColor: elevate ? "white " : "transparent", // Set the navbar background color to white
+						color: elevate ? "black" : "white ", // Set the text and icon color to black
+						boxShadow: elevate ? null : "none",
 					}}
 				>
-					<Typography id="add-mileage-title" variant="h6">
-						Add Mileage
-					</Typography>
+					<Toolbar className="">
+						<Typography
+							variant="h6"
+							noWrap
+							component="div"
+							sx={{ flexGrow: 1, display: {} }}
+						>
+							VEHICE.INFO
+						</Typography>
 
-					<TextField
-						select
-						fullWidth
-						margin="normal"
-						label="Select Vehicle Type"
-						value={vehicleType}
-						onChange={(e) => {
-							setVehicleType(e.target.value);
-							fetchVehicleOptions(e.target.value);
-						}}
-						SelectProps={{
-							native: true,
+						<Search ref={refSuggestionList}>
+							<SearchIconWrapper>
+								<SearchIcon />
+							</SearchIconWrapper>
+							<StyledInputBase
+								value={searchQuery}
+								onChange={handleSearchChange}
+								placeholder="Search…"
+								inputProps={{
+									"aria-label": "search",
+									style: {
+										fontStyle: "italic", // Apply italic style here
+									},
+								}}
+							/>
+							{suggestions.length > 0 && (
+								<SuggestionsList
+									sx={{
+										backgroundColor: elevate
+											? "white "
+											: "rgba(40, 40, 40, 0.7)",
+									}}
+								>
+									{suggestions.map((suggestion) => (
+										<SuggestionItem
+											sx={{
+												":hover": {
+													backgroundColor: elevate
+														? "rgba(0, 0, 0, 0.2)"
+														: "rgba(255, 255, 255, 0.3)",
+												},
+											}}
+											key={suggestion.model}
+											onClick={() => handleSuggestionClick(suggestion)}
+										>
+											<Link to={`/vehicles/${suggestion.model}`}>
+												{suggestion.model.includes(suggestion.make)
+													? suggestion.model
+													: suggestion.make + " " + suggestion.model}
+											</Link>
+										</SuggestionItem>
+									))}
+								</SuggestionsList>
+							)}
+						</Search>
+
+						<IconButton
+							variant="contained"
+							color="inherit"
+							onClick={() => setOpenMileageModal(true)}
+							sx={{
+								color: "inherit",
+								marginLeft: "16px",
+								display: "flex",
+								alignItems: "center",
+								gap: "8px",
+								borderRadius: 0,
+								border: "none",
+								outline: "none",
+								backgroundColor: "transparent",
+								":hover": {
+									backgroundColor: "transparent",
+									border: "none",
+								},
+								":focus": {
+									border: "none",
+									outline: "none",
+									backgroundColor: "transparent",
+								},
+							}}
+						>
+							<LocalGasStationIcon />
+							<Typography
+								variant="button"
+								sx={{
+									fontWeight: 500,
+								}}
+							>
+								Add Mileage
+							</Typography>
+						</IconButton>
+						<IconButton size="large" color="inherit">
+							<AccountCircle
+								sx={{ fontSize: 40 }}
+								onClick={() => {
+									dispatch({ type: "opened" });
+								}}
+							/>
+						</IconButton>
+					</Toolbar>
+				</AppBar>
+
+				{/* user modal */}
+				<Modal
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="modal-modal-title"
+					aria-describedby="modal-modal-description"
+				>
+					<Box>
+						<Typography id="modal-modal-title" variant="h6" component="h2">
+							Text in a modal
+						</Typography>
+						<Typography id="modal-modal-description" sx={{ mt: 2 }}>
+							Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+						</Typography>
+					</Box>
+				</Modal>
+				{/* mileage submit modal */}
+
+				<Modal
+					open={openMileageModal}
+					onClose={() => setOpenMileageModal(false)}
+					aria-labelledby="add-mileage-title"
+					aria-describedby="add-mileage-description"
+				>
+					<Box
+						sx={{
+							position: "absolute",
+							top: "50%",
+							left: "50%",
+							transform: "translate(-50%, -50%)",
+							width: 400,
+							bgcolor: "background.paper",
+							boxShadow: 24,
+							p: 4,
+							borderRadius: 2,
 						}}
 					>
-						<option value="">Select</option>
-						<option value="car">Car</option>
-						<option value="bike">Bike</option>
-					</TextField>
+						<Typography id="add-mileage-title" variant="h6">
+							Add Mileage
+						</Typography>
 
-					{vehicleType && (
 						<TextField
 							select
 							fullWidth
 							margin="normal"
-							label="Select Vehicle"
-							value={selectedVehicle}
-							onChange={(e) => setSelectedVehicle(e.target.value)}
+							label="Select Vehicle Type"
+							value={vehicleType}
+							onChange={(e) => {
+								setVehicleType(e.target.value);
+								fetchVehicleOptions(e.target.value);
+							}}
 							SelectProps={{
 								native: true,
 							}}
 						>
 							<option value="">Select</option>
-							{vehicleOptions.map((option) =>
-								vehicleType === "car" ? (
-									<option key={option.version} value={option.version}>
-										{`${option.make} ${option.model} ${option.version} `}
-										{/* ${option.version} */}
-									</option>
-								) : (
-									<option key={option.version} value={option.version}>
-										{`${option.make} ${option.model} ${option.version} `}
-										{/* ${option.version} */}
-									</option>
-								)
-							)}
+							<option value="car">Car</option>
+							<option value="bike">Bike</option>
 						</TextField>
-					)}
 
-					{/* <TextField
+						{vehicleType && (
+							<TextField
+								select
+								fullWidth
+								margin="normal"
+								label="Select Vehicle"
+								value={selectedVehicle}
+								onChange={(e) => setSelectedVehicle(e.target.value)}
+								SelectProps={{
+									native: true,
+								}}
+							>
+								<option value="">Select</option>
+								{vehicleOptions.map((option) =>
+									vehicleType === "car" ? (
+										<option key={option.version} value={option.version}>
+											{`${option.make} ${option.model} ${option.version} `}
+											{/* ${option.version} */}
+										</option>
+									) : (
+										<option key={option.version} value={option.version}>
+											{`${option.make} ${option.model} ${option.version} `}
+											{/* ${option.version} */}
+										</option>
+									)
+								)}
+							</TextField>
+						)}
+
+						{/* <TextField
 						fullWidth
 						margin="normal"
 						label="Mileage"
@@ -371,8 +434,9 @@ export default function SearchAppBar() {
 					>
 						Submit
 					</Button> */}
-				</Box>
-			</Modal>
-		</Box>
+					</Box>
+				</Modal>
+			</Box>
+		</div>
 	);
 }

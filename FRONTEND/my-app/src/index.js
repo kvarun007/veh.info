@@ -4,14 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme'; // Import your theme here
+import theme from './theme';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}> {/* Wrap App with ThemeProvider */}
-      <App />
+    <ThemeProvider theme={theme}> 
+      <App style={{ fontFamily: "Lato",}}/>
     </ThemeProvider>
   </React.StrictMode>
 );
