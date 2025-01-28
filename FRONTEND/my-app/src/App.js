@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Search from './components/navbar';
+
 import IndexPage from './components/indexPage';
 import VehicleTypeProvider from './components/VehicleTypeContext';
 import { Link } from "react-router-dom";
@@ -11,8 +11,8 @@ import VehiclePages from './components/secondPage/vehiclePage';
 import { Provider } from 'react-redux';
 import store from './components/redux/reduxStore';
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Footer from "./components/footer";
-import Navbar from './components/navbar';
+import Footer from "./components/Base components/footer";
+import Navbar from './components/Base components/navbar';
 
 
 

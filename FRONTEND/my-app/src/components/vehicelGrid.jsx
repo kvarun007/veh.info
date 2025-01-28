@@ -74,9 +74,9 @@ export default function VehicleGrid() {
 			<Box className="max-w-[90%] mx-auto  ">
 				<Grid
 					container
-					spacing={5}
+					spacing={3}
 					sx={{ mt: 2 }}
-					className=" mb-12 justify-center mt-1 "
+					className=" mb-12 justify-center mt-1"
 				>
 					{/* Check if vehiclesData is not null and map */}
 					{vehiclesData ? (
@@ -89,7 +89,7 @@ export default function VehicleGrid() {
 									/>
 									<Divider className=" w-[100%] " variant="middle " />
 									<div className="bg-[#F9F9F9] ">
-										<p className="font-loto text-2xl text-loto pt-2 text-left ml-6  font-semibold ">
+										<p className="font-loto text-lg text-loto pt-2 text-left ml-6   font-semibold  ">
 											{vehicle.model.includes(vehicle.make)
 												? vehicle.model
 												: vehicle.make + " " + vehicle.model}

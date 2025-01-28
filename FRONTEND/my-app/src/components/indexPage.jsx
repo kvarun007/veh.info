@@ -13,15 +13,16 @@ export default function IndexPage() {
 					<img src={bike1} className="w-full h-[32rem] " />
 				</div>
 				<Paper
-					className="  w-[97%] max-w-[97%] min-h-[30rem]   top-[450px]"
+					className="  w-[97%] max-w-[97%] min-h-[30rem]   top-[450px] "
 					sx={{
-						bgcolor: "rgba(252,252,254, 0.99)",
+						bgcolor: "rgba(252,252,254, 0.99)", //"rgba(252,252,254, 0.99)"
 						margin: "auto",
 						marginTop: "-10vh",
 					}}
 					elevation={24}
 				>
-					<div className="font-bold mt-4 mb-4 text-2xl ml-[11%] border-red  ">
+					{/* <div className="bg-[#9AA6B2] pt-2 mt-4 w-[90%] justify-self-center rounded-xl"> */}
+					<div className="font-bold  mt-4 mb-4 text-2xl ml-[11%] border-red  ">
 						{/* bg-black sm:bg-blue-800 md:bg-red-500 xl:bg-green-500 */}
 						<p>POPULAR SEARCHES</p>
 					</div>
@@ -33,6 +34,8 @@ export default function IndexPage() {
 							variant="middle"
 						/>
 					</div>
+					{/* </div> */}
+
 					<div className="">
 						<VehicleGrid className="" />
 					</div>

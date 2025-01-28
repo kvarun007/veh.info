@@ -2,6 +2,7 @@ import React from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { LinkedIn, Instagram, Facebook, Email } from "@mui/icons-material";
 
+// This function returns the Footer with the ICONS and COPY right text
 export default function Footer() {
 	return (
 		<Box

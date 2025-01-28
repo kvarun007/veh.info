@@ -85,10 +85,12 @@ const SuggestionItem = styled("div")({
 	},
 });
 
+// This function returns the NAVBAR
 export default function Navbar() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [suggestions, setSuggestions] = useState([]);
 	const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
+
 	useEffect(() => {
 		document.addEventListener(
 			"click",
@@ -100,7 +102,6 @@ export default function Navbar() {
 	const refSuggestionList = useRef(null);
 	const handleClickOutsideOfSuggestionList = (e) => {
 		if (!refSuggestionList.current.contains(e.target)) {
-			// console.log("clicked outside");
 			setSearchQuery("");
 		}
 	};
@@ -109,7 +110,7 @@ export default function Navbar() {
 		if (debouncedSearchQuery.length > 0) {
 			fetchSuggestions(debouncedSearchQuery);
 		} else {
-			setSuggestions([]); // Clear suggestions when input is empty
+			setSuggestions([]); // Clearing suggestions when input is empty
 		}
 	}, [debouncedSearchQuery]);
 
@@ -119,22 +120,19 @@ export default function Navbar() {
 				`http://127.0.0.1:8000/api/vehicles/search/?q=${query}`
 			);
 			const data = await response.json();
-			setSuggestions(data); // Assuming the API returns an array of suggestions
-			// console.log(suggestions);
+			setSuggestions(data); //  API returns an array of suggestions
 		} catch (error) {
 			console.error("Error fetching suggestions:", error);
 			setSuggestions([]);
 		}
 	};
-
+	// This function Updates the text in the Search component of the navbar
 	const handleSearchChange = (event) => {
 		setSearchQuery(event.target.value);
-		// console.log(searchQuery);
 	};
 
-	// Handle suggestion click
+	// This function takes the suggestion click by the user from the sugggestion list and set it as searchQuery state and it set the suggestion to empty array
 	const handleSuggestionClick = (suggestion) => {
-		// console.log(suggestion.vehicleName);
 		setSearchQuery(
 			suggestion.model.includes(suggestion.make)
 				? suggestion.model
@@ -142,7 +140,6 @@ export default function Navbar() {
 		);
 		setSuggestions([]);
 		setSearchQuery("");
-		// alert(`get the ${suggestion.model} details`); // need to redirct
 	};
 
 	//handle Profile click
@@ -344,8 +341,8 @@ export default function Navbar() {
 						</Typography>
 					</Box>
 				</Modal>
-				{/* mileage submit modal */}
 
+				{/* mileage submit modal */}
 				<Modal
 					open={openMileageModal}
 					onClose={() => setOpenMileageModal(false)}
