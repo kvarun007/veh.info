@@ -1,35 +1,19 @@
 import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid2";
-import { styled } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-// import { useVehicleType } from "./VehicleTypeContext";
 import { Box } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Login from "./auth/loginPage";
 
 export default function VehicleGrid() {
-	// item tag styles- grid
-	const Item = styled(Paper)(({ theme }) => ({
-		backgroundColor: "#fff",
-		padding: theme.spacing(1),
-		textAlign: "center",
-	}));
-
 	const [vehiclesData, setVehiclesData] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const vehicleType = useSelector((state) => state.vehicleType);
 
-	// Access the vehicleType from the context
-	// const { vehicleType } = useVehicleType();
-	const vehicleType = useSelector((state) => state.vehicleType); // changed from context api to redux
-
-	const lastRowStartIndex = vehiclesData
-		? Math.floor(vehiclesData.length / 3) * 3
-		: 0;
-
-	// renddering all vehicles
 	const fetchAllVehicles = async () => {
+		setIsLoading(true);
 		try {
 			if (vehicleType == "all") {
 				// console.log(vehicleType);
@@ -63,58 +47,57 @@ export default function VehicleGrid() {
 			}
 		} catch (error) {
 			console.error("Error fetching data:", error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
+
 	useEffect(() => {
 		fetchAllVehicles();
 	}, [vehicleType]);
 
 	return (
-		<>
-			<Box className="max-w-[90%] mx-auto  ">
-				<Grid
-					container
-					spacing={3}
-					sx={{ mt: 2 }}
-					className=" mb-12 justify-center mt-1"
-				>
-					{/* Check if vehiclesData is not null and map */}
-					{vehiclesData ? (
-						vehiclesData.map((vehicle, index) => (
-							<Grid item key={index} className="">
-								<Item elevation={2} className="">
-									<img
-										src={vehicle.image_url}
-										className="size-60 object-contain"
-									/>
-									<Divider className=" w-[100%] " variant="middle " />
-									<div className="bg-[#F9F9F9] ">
-										<p className="font-loto text-lg text-loto pt-2 text-left ml-6   font-semibold  ">
-											{vehicle.model.includes(vehicle.make)
-												? vehicle.model
-												: vehicle.make + " " + vehicle.model}
-										</p>
-										<Link to={`/vehicles/${vehicle.model}`}>
-											<Button
-												variant="outlined"
-												size="large w-3/4 "
-												sx={{ marginTop: "1rem", marginBottom: "1rem" }}
-												// onClick={() => {
-												// 	alert(`get the ${vehicle.vehicleName} details`);
-												// }}
-											>
-												Get Details
-											</Button>
-										</Link>
-									</div>
-								</Item>
-							</Grid>
-						))
-					) : (
-						<p>Loading vehicles...</p> // Placeholder when data is loading
-					)}
-				</Grid>
-			</Box>
-		</>
+		<Box className="max-w-7xl mx-auto px-4 mb-6 ">
+			<Grid container spacing={3} sx={{ mt: 0 }}>
+				{isLoading ? (
+					<p className="text-center w-full">Loading vehicles...</p>
+				) : vehiclesData && vehiclesData.length > 0 ? (
+					vehiclesData.map((vehicle, index) => (
+						<Grid item key={index} xs={12} sm={6} md={4}>
+							<Paper
+								elevation={2}
+								className="hover:shadow-lg transition-shadow duration-300"
+							>
+								<img
+									src={vehicle.image_url}
+									alt={vehicle.model}
+									className="w-full h-60 object-cover"
+								/>
+								<Divider className="w-full" />
+								<div className="p-4 bg-[#F9F9F9]">
+									<p className="font-loto text-lg font-semibold text-gray-800">
+										{vehicle.model.includes(vehicle.make)
+											? vehicle.model
+											: vehicle.make + " " + vehicle.model}
+									</p>
+									<Link to={`/vehicles/${vehicle.model}`}>
+										<Button
+											variant="outlined"
+											fullWidth
+											sx={{ mt: 2, mb: 1 }}
+											aria-label={`Get details for ${vehicle.model}`}
+										>
+											Get Details
+										</Button>
+									</Link>
+								</div>
+							</Paper>
+						</Grid>
+					))
+				) : (
+					<p className="text-center w-full">No vehicles found.</p>
+				)}
+			</Grid>
+		</Box>
 	);
 }

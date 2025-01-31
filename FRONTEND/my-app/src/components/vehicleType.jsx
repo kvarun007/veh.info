@@ -57,7 +57,7 @@ export default function VehicleTypeButtons() {
 	}
 
 	return (
-		<div className="ml-[11%] ">
+		<div className="ml-[8%] ">
 			<Stack spacing={2} direction="row">
 				<Button
 					variant={bikeClicked ? "contained" : "outlined"}
