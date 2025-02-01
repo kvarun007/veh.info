@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import { useState } from "react";
-import ImageSlider from "./imageSlider";
+import ImageSlider from "../second page components/Car components/imageSlider";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];

@@ -8,7 +8,7 @@ import VehicleTypeProvider from './components/VehicleTypeContext';
 import { Link } from "react-router-dom";
 import { BrowserRouter, Route, Routes} from "react-router-dom";
 import Login from './components/auth/loginPage';
-import VehiclePages from './components/secondPage/vehiclePage';
+import VehiclePages from './components/second page components/Base component/vehiclePage';
 import { Provider } from 'react-redux';
 import store from './components/redux/reduxStore';
 import { GoogleOAuthProvider } from "@react-oauth/google";

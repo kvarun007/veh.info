@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import ResponsiveAppBar from "./toolBar";
-import ImageSlider from "./imageSlider";
+import ResponsiveAppBar from "../../secondPage/toolBar";
+import ImageSlider from "../Car components/imageSlider";
 import React, { useState, useEffect } from "react";
-import SafetyFeatures from "./safetyFeatures";
-import Variants from "./variants";
-import OnRoadPriceCard from "./onRoadPrice";
-import EMICalculator from "./emiCal";
-import ImageSliderBike from "../vehicleSecondPage/ImageSliderBike";
-import BasicBikeFeatures from "../vehicleSecondPage/BasicBikeFeatures";
-import VariantsBike from "../vehicleSecondPage/variantsBike";
+import SafetyFeatures from "../Car components/safetyFeatures";
+import Variants from "../Car components/variants";
+import OnRoadPriceCard from "../Common components/onRoadPrice";
+import EMICalculator from "../../secondPage/emiCal";
+import ImageSliderBike from "../Bike components/ImageSliderBike";
+import BasicBikeFeatures from "../Bike components/BasicBikeFeatures";
+import VariantsBike from "../Bike components/variantsBike";
 
 export default function VehiclePages() {
 	const params = useParams();
@@ -35,7 +35,7 @@ export default function VehiclePages() {
 
 	return vehicleData && vehicleData[0].vehicle_type === "car" ? (
 		<div className="mt-10 mx-[5%] w-100%  bg-[#F9F9F9]">
-			<ResponsiveAppBar />
+			{/* <ResponsiveAppBar /> */}
 			<div className="mt-10 py-4 px-4 md:px-6 flex flex-col md:flex-row lg:flex-row space-y-6 md:space-y-0 md:space-x-1 bg-[#F9F9F9]">
 				<ImageSlider vehicleData={vehicleData} />
 			</div>
@@ -55,7 +55,7 @@ export default function VehiclePages() {
 		</div>
 	) : (
 		<div className="mt-10 mx-[5%] w-100%  bg-[#F9F9F9]">
-			<ResponsiveAppBar />
+			{/* <ResponsiveAppBar /> */}
 			<div className="mt-10 py-4 px-4 md:px-6 flex flex-col md:flex-row lg:flex-row space-y-6 md:space-y-0 md:space-x-1 bg-[#F9F9F9]">
 				<ImageSliderBike vehicleData={vehicleData} />
 			</div>

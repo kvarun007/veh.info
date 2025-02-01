@@ -1,10 +1,11 @@
 import React from "react";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import "tailwindcss/tailwind.css";
-import EMIModal from "../secondPage/emiModal";
-import UserPredictedMileage from "../secondPage/userPredictedMilege";
+// import EMIModal from "../Common components/emiModal";
+import EMIModal from "../Common components/emiModal";
+import UserPredictedMileage from "../../secondPage/userPredictedMilege";
 
-export default function VariantsBikeList({ data }) {
+export default function VariantsList({ data }) {
 	// Handle cases where vehicleData is unavailable or empty
 	console.log(data);
 	if (!data || data.length === 0) {
@@ -35,13 +36,13 @@ export default function VariantsBikeList({ data }) {
 							>
 								{vehicle.make} {vehicle.model} {vehicle.version}
 							</Typography>
-							{/* <Typography
+							<Typography
 								variant="body2"
 								className="text-gray-600 mb-2 leading-relaxed"
 							>
 								{vehicle.key_engine}, {vehicle.key_transmission},{" "}
 								{vehicle.fuel_type}, {vehicle.key_mileage_arai_field}
-							</Typography> */}
+							</Typography>
 							<Typography variant="body2" className="text-gray-600">
 								<span className="font-semibold">User Predicted Mileage:</span>{" "}
 								<span className="font-bold">
@@ -59,9 +60,9 @@ export default function VariantsBikeList({ data }) {
 								component="p"
 								className="text-gray-800 font-bold mb-2"
 							>
-								₹ {vehicle.ex_showroom_price_in_mumbai}
+								₹ {vehicle.price.replace("?", "")}
 							</Typography>
-							<EMIModal price={vehicle.ex_showroom_price_in_mumbai} />
+							<EMIModal price={vehicle.price.replace("?", "")} />
 						</Box>
 					</CardContent>
 				</Card>
