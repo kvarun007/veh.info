@@ -1,11 +1,9 @@
 import { useParams } from "react-router-dom";
-import ResponsiveAppBar from "../../secondPage/toolBar";
 import ImageSlider from "../Car components/imageSlider";
 import React, { useState, useEffect } from "react";
 import SafetyFeatures from "../Car components/safetyFeatures";
 import Variants from "../Car components/variants";
 import OnRoadPriceCard from "../Common components/onRoadPrice";
-import EMICalculator from "../../secondPage/emiCal";
 import ImageSliderBike from "../Bike components/ImageSliderBike";
 import BasicBikeFeatures from "../Bike components/BasicBikeFeatures";
 import VariantsBike from "../Bike components/variantsBike";

@@ -3,7 +3,6 @@ import { Box, Card, CardContent, Typography } from "@mui/material";
 import "tailwindcss/tailwind.css";
 // import EMIModal from "../Common components/emiModal";
 import EMIModal from "../Common components/emiModal";
-import UserPredictedMileage from "../../secondPage/userPredictedMilege";
 
 export default function VariantsList({ data }) {
 	// Handle cases where vehicleData is unavailable or empty
@@ -49,8 +48,6 @@ export default function VariantsList({ data }) {
 									{vehicle.user_predicted_mileage || "No Record Found"}
 								</span>
 							</Typography>
-
-							<UserPredictedMileage vehicle={vehicle} />
 						</Box>
 
 						{/* Price and Button */}
