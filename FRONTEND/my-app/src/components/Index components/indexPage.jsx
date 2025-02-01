@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import bike1 from "../static/images/background.jpg";
+
+import bike1 from "../../static/images/background.jpg";
 import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import VehicleTypeButtons from "./vehicleType";

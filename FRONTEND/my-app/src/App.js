@@ -2,7 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import IndexPage from './components/indexPage';
+// import IndexPage from './components./index components/indexPage';
+import IndexPage from './components/Index components/indexPage';
 import VehicleTypeProvider from './components/VehicleTypeContext';
 import { Link } from "react-router-dom";
 import { BrowserRouter, Route, Routes} from "react-router-dom";

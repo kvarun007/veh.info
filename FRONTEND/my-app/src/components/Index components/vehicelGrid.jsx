@@ -31,7 +31,7 @@ export default function VehicleGrid() {
 				const result = await response.json();
 				setVehiclesData(result.cars);
 				// setVehiclesData(null)
-				// console.log(result.cars);
+				console.log(result.cars);
 			} else if (vehicleType == "bike") {
 				// console.log(vehicleType);
 				const response = await fetch(
@@ -57,7 +57,7 @@ export default function VehicleGrid() {
 	}, [vehicleType]);
 
 	return (
-		<Box className="max-w-7xl mx-auto px-4 mb-6 ">
+		<Box className="max-w-7xl mx-auto px-4 mb-6">
 			<Grid container spacing={3} sx={{ mt: 0 }}>
 				{isLoading ? (
 					<p className="text-center w-full">Loading vehicles...</p>
@@ -80,14 +80,23 @@ export default function VehicleGrid() {
 											? vehicle.model
 											: vehicle.make + " " + vehicle.model}
 									</p>
+									<p className="font-loto text-lg font-semibold text-gray-800">
+										Rs. {vehicle.price} onwards
+									</p>
+
 									<Link to={`/vehicles/${vehicle.model}`}>
 										<Button
-											variant="outlined"
+											variant="contained"
 											fullWidth
-											sx={{ mt: 2, mb: 1 }}
+											sx={{
+												mt: 2,
+												mb: 1,
+												backgroundColor: "#004684",
+												color: "#fff",
+											}}
 											aria-label={`Get details for ${vehicle.model}`}
 										>
-											Get Details
+											Get details
 										</Button>
 									</Link>
 								</div>

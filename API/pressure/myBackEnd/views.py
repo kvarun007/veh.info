@@ -12,20 +12,38 @@ from .serializers import VehicleSerializer
 from django.db.models import Q
 
 # Create your views here.
-
+# get_all_cars function return all the cars used for the index pages 
 def get_all_cars(request):
-    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url",).exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
-    cars_data = []
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', 'image_url', 'price').exclude(model__regex=r'\[\d{4}-\d{4}\]')
+    
+    # Dictionary to store the lowest price for each unique combination of make, model, and image_url
+    lowest_price_cars = {}
+
     for car in cars:
-        cars_data.append({
-            'make' : car['make'],
-            'model' : car['model'],
-            "image_url":car['image_url']
-        })
+        key = (car['make'], car['model'])  # Unique key for each combination
+        price = float(car['price'].replace("?","").replace("Lakh","").strip())
+
+        # If the key is not in the dictionary or the current price is lower, update the dictionary
+        if key not in lowest_price_cars or price < float(lowest_price_cars[key]['price'].replace("Lakh","").strip()):
+            
+            print(f"{key} - {price}")
+            
+            lowest_price_cars[key] = {
+                'make': car['make'],
+                'model': car['model'],
+                'image_url': car['image_url'],
+                'price': str(price) + " Lakh" 
+            }
+
+    # Convert the dictionary values to a list
+    cars_data = list(lowest_price_cars.values())
+
     return JsonResponse({'cars': cars_data})
 
+#get_all_cars_details fucntion
 def get_all_cars_details(request):
     cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url","version").exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    
     cars_data = []
     for car in cars:
         cars_data.append({
@@ -52,16 +70,34 @@ def get_all_vehicles (request):
 
 def get_all_bikes(request):
     # return HttpResponse("dispalying all bikes ")
-    bikes = IndiaBikeDatabase.objects.values('model').distinct()
-    bikes_data = []
+    bikes = IndiaBikeDatabase.objects.values('make', 'model', 'image_url', 'mumbai').distinct()
+    
+     # Dictionary to store the lowest price for each unique combination of make, model, and image_url
+    lowest_price_bikes = {}
+
     for bike in bikes:
-        related_bike = IndiaBikeDatabase.objects.filter(model=bike['model']).first()
-        bikes_data.append({
-            'make': related_bike.make,
-            'model': related_bike.model,
-            'image_url': related_bike.image_url,
-        })
+        key = (bike['make'], bike['model'])  # Unique key for each combination
+        price = bike['mumbai'].replace("â‚¹ ","").replace("onwards","").strip()
+        # price = bike["mumbai"]
+
+        # If the key is not in the dictionary or the current price is lower, update the dictionary
+        if key not in lowest_price_bikes or float(price.replace(',', '')) < float(lowest_price_bikes[key]['price'].replace(',', '')):
+            
+            print(f"{key} - {price}")
+            
+            lowest_price_bikes[key] = {
+                'make': bike['make'],
+                'model': bike['model'],
+                'image_url': bike['image_url'],
+                'price': price
+            }
+
+    # Convert the dictionary values to a list
+    bikes_data = list(lowest_price_bikes.values())
+
     return JsonResponse({'bikes': bikes_data})
+
+  
 
 
 # def get_all_cars(request):
