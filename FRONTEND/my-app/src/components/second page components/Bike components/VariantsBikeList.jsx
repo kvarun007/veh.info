@@ -18,7 +18,7 @@ export default function VariantsBikeList({ data }) {
 	}
 
 	return (
-		<Box className="p-4 bg-gray-50 min-h-screen">
+		<Box className="p-4  pt-4 bg-gray-50  max-h-[85svh] overflow-y-auto">
 			{data.map((vehicle, index) => (
 				<Card
 					key={index}

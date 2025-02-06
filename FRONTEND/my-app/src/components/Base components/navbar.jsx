@@ -157,7 +157,7 @@ export default function Navbar() {
 	const [vehicleOptions, setVehicleOptions] = useState([]); // Options for selected type
 	const [selectedVehicle, setSelectedVehicle] = useState(""); // Selected vehicle
 
-	const fetchVehicleOptions = async (type) => {
+	const fetchVehicleBrand = async (type) => {
 		try {
 			const endpoint =
 				type === "car"
@@ -374,7 +374,7 @@ export default function Navbar() {
 							value={vehicleType}
 							onChange={(e) => {
 								setVehicleType(e.target.value);
-								fetchVehicleOptions(e.target.value);
+								fetchVehicleBrand(e.target.value);
 							}}
 							SelectProps={{
 								native: true,
@@ -401,12 +401,12 @@ export default function Navbar() {
 								{vehicleOptions.map((option) =>
 									vehicleType === "car" ? (
 										<option key={option.version} value={option.version}>
-											{`${option.make} ${option.model} ${option.version} `}
+											{`${option.make}  `}
 											{/* ${option.version} */}
 										</option>
 									) : (
 										<option key={option.version} value={option.version}>
-											{`${option.make} ${option.model} ${option.version} `}
+											{`${option.make} `}
 											{/* ${option.version} */}
 										</option>
 									)

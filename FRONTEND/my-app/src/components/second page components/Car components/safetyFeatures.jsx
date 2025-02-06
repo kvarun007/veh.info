@@ -62,22 +62,53 @@ export default function SafetyFeatures({ vehicleData }) {
 	}, [vehicleData]);
 
 	return (
-		<div className="flex-1 md:w-full bg-white p-6 rounded-lg shadow-md border border-[#1976D2] space-y-4 ">
+		// <div className="px-2 md:px-6 bg-[#F9F9F9] py-6 rounded-2xl shadow-2xl">
+		<div className="flex-1 w-[90%] p-4 justify-self-center bg-white  md:p-6  space-y-4 md:space-y-6 rounded-2xl shadow-xl">
 			{/* Airbags Section */}
 			{vehicleData && vehicleData.length > 0 ? (
 				vehicleData[0].airbags ? (
-					<div className="text-xl font-medium text-gray-700 flex justify-between items-center">
-						<div className="flex items-center">
+					<div className="text-lg md:text-xl font-medium text-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center space-y-2 md:space-y-0">
+						<div className="flex items-center space-x-2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className="h-5 w-5 md:h-6 md:w-6 text-[#1976D2]"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+								/>
+							</svg>
 							<strong className="text-[#1976D2]">Airbags:</strong>
 						</div>
-						<div>{vehicleData[0].airbags}</div>
+						<div className="text-gray-600">{vehicleData[0].airbags}</div>
 					</div>
 				) : (
-					<div className="text-xl font-medium text-gray-700 flex justify-between items-center">
-						<div className="flex items-center">
+					<div className="text-lg md:text-xl font-medium text-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center space-y-2 md:space-y-0">
+						<div className="flex items-center space-x-2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className="h-5 w-5 md:h-6 md:w-6 text-[#1976D2]"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+								/>
+							</svg>
 							<strong className="text-[#1976D2]">Airbags:</strong>
 						</div>
-						<div>Airbag information not available.</div>
+						<div className="text-gray-600">
+							Airbag information not available.
+						</div>
 					</div>
 				)
 			) : (
@@ -85,28 +116,77 @@ export default function SafetyFeatures({ vehicleData }) {
 			)}
 
 			{/* Braking System Section */}
-			<div className="text-xl font-medium text-gray-700 flex justify-between items-center">
-				<div className="flex items-center">
+			<div className="text-lg md:text-xl font-medium text-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center space-y-2 md:space-y-0">
+				<div className="flex items-center space-x-2">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-5 w-5 md:h-6 md:w-6 text-[#1976D2]"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+						/>
+					</svg>
 					<strong className="text-[#1976D2]">Braking Systems:</strong>
 				</div>
-				<div>{brakingSystem_Str || "Loading braking systems..."}</div>
+				<div className="text-gray-600">
+					{brakingSystem_Str || "Loading braking systems..."}
+				</div>
 			</div>
 
 			{/* StabilityFeatures Section */}
-			<div className="text-xl font-medium text-gray-700 flex justify-between items-center">
-				<div className="flex items-center">
+			<div className="text-lg md:text-xl font-medium text-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center space-y-2 md:space-y-0">
+				<div className="flex items-center space-x-2">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-5 w-5 md:h-6 md:w-6 text-[#1976D2]"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+						/>
+					</svg>
 					<strong className="text-[#1976D2]">Stability Features:</strong>
 				</div>
-				<div>{stabilityFeatures_Str || "Loading stability Features..."}</div>
+				<div className="text-gray-600">
+					{stabilityFeatures_Str || "Loading stability Features..."}
+				</div>
 			</div>
 
 			{/* ChildSafety Section */}
-			<div className="text-xl font-medium text-gray-700 flex justify-between items-center">
-				<div className="flex items-center">
+			<div className="text-lg md:text-xl font-medium text-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center space-y-2 md:space-y-0">
+				<div className="flex items-center space-x-2">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-5 w-5 md:h-6 md:w-6 text-[#1976D2]"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+						/>
+					</svg>
 					<strong className="text-[#1976D2]">Child Safety:</strong>
 				</div>
-				<div>{childSafety || "Loading child Safety Features..."}</div>
+				<div className="text-gray-600">
+					{childSafety || "Loading child Safety Features..."}
+				</div>
 			</div>
 		</div>
+		// </div>
 	);
 }

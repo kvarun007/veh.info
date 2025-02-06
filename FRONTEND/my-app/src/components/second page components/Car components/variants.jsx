@@ -10,6 +10,7 @@ import {
 	Radio,
 	RadioGroup,
 	FormControlLabel,
+	Divider,
 } from "@mui/material";
 import "tailwindcss/tailwind.css";
 
@@ -188,20 +189,24 @@ export default function Variants({ vehicleData }) {
 
 	return (
 		<>
-			<div className="flex-1 md:w-full bg-white p-6 rounded-lg shadow-md border border-[#1976D2] space-y-4 mt-4">
-				<Box>
-					<Card className="mb-6 shadow-lg">
-						<CardContent>
-							<Typography variant="h4" className="text-gray-800 font-bold">
-								{vehicleData[0].make} {vehicleData[0].model} price
-							</Typography>
-						</CardContent>
-					</Card>
+			<div className="flex-1 w-[90%] justify-self-center bg-white   space-y-4 mt-4 rounded-2xl shadow-2xl">
+				<Box className="ml-[2%] px-6 pt-6">
+					<Typography
+						variant="h4"
+						className="text-gray-800 font-bold text-3xl md:text-4xl mb-2 "
+					>
+						{vehicleData[0].make} {vehicleData[0].model} price
+					</Typography>
+					<Typography variant="subtitle1" className="text-gray-600 text-lg">
+						Explore the variants and features of the {vehicleData[0].make}{" "}
+						{vehicleData[0].model}.
+					</Typography>
+					<Divider className="my-4" />
 
 					{/* Tabs */}
 
 					{fuelType.length > 1 ? (
-						<div className="ml-[2%]">
+						<div className="">
 							<Tabs
 								value={tabValue}
 								onChange={handleTabChange}
@@ -221,7 +226,7 @@ export default function Variants({ vehicleData }) {
 							row
 							value={selectedTransmission}
 							onChange={handleTransmissionChange}
-							className="mt-4 ml-[2%]"
+							className="mt-4 "
 						>
 							{transmissionType.length > 1 && (
 								<FormControlLabel value="All" control={<Radio />} label="All" />

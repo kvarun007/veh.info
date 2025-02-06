@@ -40,19 +40,29 @@ def get_all_cars(request):
 
     return JsonResponse({'cars': cars_data})
 
-#get_all_cars_details fucntion
-def get_all_cars_details(request):
-    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url","version").exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+#get_all_cars_details fucntion retruns the all brand names of the cars 
+def get_all_cars_brands(request):
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
     
     cars_data = []
     for car in cars:
         cars_data.append({
-            'make' : car['make'],
-            'model' : car['model'],
-            'version' : car["version"],
-            "image_url":car['image_url']
+            'make' : car['make']
         })
     return JsonResponse({'cars': cars_data})
+
+# def get_all_cars_details(request):
+#     cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url","version").exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    
+#     cars_data = []
+#     for car in cars:
+#         cars_data.append({
+#             'make' : car['make'],
+#             'model' : car['model'],
+#             'version' : car["version"],
+#             "image_url":car['image_url']
+#         })
+#     return JsonResponse({'cars': cars_data})
 
 
 
