@@ -4,7 +4,7 @@ from .models import IndiaCarDatabaseByTeoalidaFullSpecsSample
 from .models import IndiaBikeDatabase
 from django.shortcuts import get_object_or_404
 import json
-
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -40,7 +40,7 @@ def get_all_cars(request):
 
     return JsonResponse({'cars': cars_data})
 
-#get_all_cars_details fucntion retruns the all brand names of the cars 
+#get_all_cars_brands fucntion retruns the all brand names of the cars 
 def get_all_cars_brands(request):
     cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
     
@@ -50,6 +50,80 @@ def get_all_cars_brands(request):
             'make' : car['make']
         })
     return JsonResponse({'cars': cars_data})
+
+
+#get_all_bikes_brands fucntion retruns the all brand names of the bikes 
+def get_all_bikes_brands(request):
+    bikes = IndiaBikeDatabase.objects.values('make').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    
+    bikes_data = []
+    for bike in bikes:
+        bikes_data.append({
+            'make' : bike['make']
+        })
+    return JsonResponse({'bikes': bikes_data})
+
+#get_all_cars_models fucntion retruns the all models of the cars using brand name  
+@api_view(["GET"])
+def get_cars_model(request):
+    print("model")
+    brand = request.GET.get("brand")
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(make__icontains=brand) \
+        .values('model').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    
+    cars_data = []
+    for car in cars:
+        cars_data.append({
+            'model' : car['model']
+        })
+    return JsonResponse({'cars': cars_data})
+
+#get_all_bikes_models fucntion retruns the all models of the bikes using brand name  
+@api_view(["GET"])
+def get_bikes_model(request):
+    brand = request.GET.get("brand")
+    bikes = IndiaBikeDatabase.objects.filter(make__icontains=brand) \
+        .values('model').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    
+    bikes_data = []
+    for bike in bikes:
+        bikes_data.append({
+            'model' : bike['model']
+        })
+    return JsonResponse({'bikes': bikes_data})
+
+
+#get_all_cars_versions fucntion retruns the all versions of the cars using brand name  and model  
+@api_view(["GET"])
+def get_cars_versions(request):
+    
+    brand = request.GET.get("brand")
+    model = request.GET.get("model")
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(make__icontains=brand,model__icontains = model) \
+        .values('version').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    
+    cars_data = []
+    for car in cars:
+        cars_data.append({
+            'version' : car['version']
+        })
+    return JsonResponse({'cars': cars_data})
+
+
+#get_all_bikes_versions fucntion retruns the all versions of the cars using brand name  and model  
+@api_view(["GET"])
+def get_bikes_versions(request):
+    brand = request.GET.get("brand")
+    model = request.GET.get("model")
+    bikes = IndiaBikeDatabase.objects.filter(make__icontains=brand,model__icontains = model) \
+        .values('version').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
+    
+    bikes_data = []
+    for bike in bikes:
+        bikes_data.append({
+            'version' : bike['version']
+        })
+    return JsonResponse({'bikes': bikes_data})
 
 # def get_all_cars_details(request):
 #     cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url","version").exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
