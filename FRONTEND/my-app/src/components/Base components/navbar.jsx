@@ -1,10 +1,7 @@
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -14,13 +11,24 @@ import { useState, useEffect, useRef } from "react";
 // import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import Footer from "./footer";
 import AddMileage from "./addMileage";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import {
+	Menu,
+	MenuItem,
+	IconButton,
+	Box,
+	Typography,
+	Divider,
+} from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -148,7 +156,7 @@ export default function Navbar() {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 
 	// Modal state for adding mileage
 	const [openMileageModal, setOpenMileageModal] = useState(false);
@@ -191,6 +199,44 @@ export default function Navbar() {
 		window.addEventListener("scroll", handleScroll); // Add the event listener
 		return () => window.removeEventListener("scroll", handleScroll); // Clean up
 	}, []);
+
+	// login user
+	const [anchorEl, setAnchorEl] = useState(null); // State to control dropdown
+
+	const openUserMenuOptions = Boolean(anchorEl); // Check if menu is open
+	//redux state of user details
+	const user = useSelector((state) => state.user);
+	const dispatch = useDispatch();
+	const setUser = (data) =>
+		dispatch({
+			type: "SET_USER",
+			payload: data,
+		});
+
+	// Function to open dropdown
+	const openUserMenu = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	// Function to close dropdown
+	const closeUserMenu = () => {
+		setAnchorEl(null);
+	};
+
+	const handleSuccess = (response) => {
+		const decodedUser = jwtDecode(response.credential); // Decode JWT token
+		console.log(decodedUser);
+		localStorage.setItem("User", JSON.stringify(decodedUser));
+		// user = JSON.parse(localStorage.getItem("User"));
+		// console.log(user);
+		setUser(decodedUser); // Store user details
+		handleClose(); // Close menu after login
+	};
+
+	// Handle Google Login Failure
+	const handleFailure = () => {
+		alert("Login failed!");
+	};
 
 	return (
 		<div>
@@ -296,32 +342,52 @@ export default function Navbar() {
 							</Typography>
 						</IconButton>
 						<IconButton size="large" color="inherit">
-							<AccountCircle
-								sx={{ fontSize: 40 }}
-								onClick={() => {
-									dispatch({ type: "opened" });
-								}}
-							/>
+							<AccountCircle sx={{ fontSize: 40 }} onClick={openUserMenu} />
 						</IconButton>
+
+						{/* Dropdown Menu */}
+
+						<Menu
+							anchorEl={anchorEl}
+							open={openUserMenuOptions}
+							onClose={closeUserMenu}
+						>
+							{!user ? (
+								<MenuItem>
+									<GoogleLogin
+										onSuccess={handleSuccess}
+										onError={handleFailure}
+									/>
+								</MenuItem>
+							) : (
+								<>
+									<Link to={"/Mygarage"}>
+										<MenuItem
+											sx={{
+												"&:hover": { bgcolor: "#252B2D", color: "white" },
+											}}
+										>
+											🚗 Your Garage
+										</MenuItem>
+									</Link>
+									<Divider />
+									<Box sx={{ p: 1, textAlign: "center" }}>
+										<Typography variant="subtitle1" fontWeight="bold">
+											{user.name}
+										</Typography>
+										<Typography variant="body2" color="text.secondary">
+											{user.email}
+										</Typography>
+										<GoogleLogin
+											onSuccess={handleSuccess}
+											onError={handleFailure}
+										/>
+									</Box>
+								</>
+							)}
+						</Menu>
 					</Toolbar>
 				</AppBar>
-
-				{/* user modal */}
-				<Modal
-					open={open}
-					onClose={handleClose}
-					aria-labelledby="modal-modal-title"
-					aria-describedby="modal-modal-description"
-				>
-					<Box>
-						<Typography id="modal-modal-title" variant="h6" component="h2">
-							Text in a modal
-						</Typography>
-						<Typography id="modal-modal-description" sx={{ mt: 2 }}>
-							Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-						</Typography>
-					</Box>
-				</Modal>
 
 				{/* mileage submit modal */}
 				<Modal

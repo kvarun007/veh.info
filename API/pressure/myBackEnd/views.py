@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import VehicleSerializer
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 # get_all_cars function return all the cars used for the index pages 
@@ -181,7 +182,33 @@ def get_all_bikes(request):
 
     return JsonResponse({'bikes': bikes_data})
 
-  
+@csrf_exempt  # Disable CSRF for testing purposes (not recommended for production)
+# @api_view(["POST"])
+def add_mileage(request):
+    print("entered into add_mileage block")
+    if request.method == "POST":
+        try:
+            # Parse JSON body
+            data = json.loads(request.body)
+            
+            # Extract required fields
+            vehicleType = data.get("vehicleType")
+            brand = data.get("brand")
+            model = data.get("model")
+            version = data.get("version")
+            mileage = data.get("mileage")
+            email = data.get("email")
+
+            # Log the received data
+            print(f"Received Data - vehicleType : {vehicleType}, Brand: {brand}, Model: {model}, Version: {version}, Mileage: {mileage}, Email: {email}")
+
+            # Respond with success
+            return JsonResponse({"message": "Mileage added successfully!"}, status=200)
+        
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 # def get_all_cars(request):

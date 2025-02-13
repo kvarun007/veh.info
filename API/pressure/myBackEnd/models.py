@@ -219,8 +219,8 @@ class IndiaCarDatabaseByTeoalidaFullSpecsSample(models.Model):
     ahmedabad = models.CharField(db_column='Ahmedabad', max_length=20, blank=True, null=True)  # Field name made lowercase.
     chennai = models.CharField(db_column='Chennai', max_length=20, blank=True, null=True)  # Field name made lowercase.
     kolkata = models.CharField(db_column='Kolkata', max_length=20, blank=True, null=True)  # Field name made lowercase.
-    user_predicted_mileage = models.DecimalField(db_column='UserPredictedMilage',max_digits=10, decimal_places=2, null=True, blank=True)
-    vin_numbers = models.TextField(null=True, blank=True)
+    # user_predicted_mileage = models.DecimalField(db_column='UserPredictedMilage',max_digits=10, decimal_places=2, null=True, blank=True)
+    # vin_numbers = models.TextField(null=True, blank=True)
     vehicle_type = models.CharField(db_column='vehicletype',max_length=255, default="car", null=True, blank=True)
 
     class Meta:

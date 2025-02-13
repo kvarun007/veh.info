@@ -14,6 +14,7 @@ import store from './components/redux/reduxStore';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Footer from "./components/Base components/footer";
 import Navbar from './components/Base components/navbar';
+import GaragePageIndexComp from "../src/GaragePage/garagePageIndexcomp"
 
 
 
@@ -30,6 +31,7 @@ function App() {
             <Route  path='/' element={<IndexPage/>}/>
             {/* <Route path="/login" element={<Login/>}/> */}
             {/* <Route path='/vehicles' element={<VehiclePages/>}/> */}
+            <Route  path='/Mygarage' element={<GaragePageIndexComp/>}/>
             <Route path="/vehicles/:vehicleModel" element={<VehiclePages/>} />
           </Routes> 
           
