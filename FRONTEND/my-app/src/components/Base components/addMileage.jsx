@@ -96,7 +96,7 @@ export default function AddMileage() {
 						model: selectedVehicleModel,
 						version: selectedVehicleVersion,
 						mileage: userEnteredMileage,
-						email: userDetails.email,
+						// email: userDetails.email,
 					}),
 				}
 			);
@@ -262,15 +262,15 @@ export default function AddMileage() {
 						}}
 					></TextField>
 				)}
-				{userEnteredMileage && (
+				{/* {userEnteredMileage && (
 					<GoogleLogin
 						onSuccess={handleSuccess}
 						onError={handleFailure}
 						useOneTap={false}
 					/>
-				)}
+				)} */}
 
-				{userDetails && (
+				{userEnteredMileage && (
 					<Button
 						variant="contained"
 						sx={{ width: "100%" }}

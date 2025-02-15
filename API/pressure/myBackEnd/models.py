@@ -222,6 +222,9 @@ class IndiaCarDatabaseByTeoalidaFullSpecsSample(models.Model):
     # user_predicted_mileage = models.DecimalField(db_column='UserPredictedMilage',max_digits=10, decimal_places=2, null=True, blank=True)
     # vin_numbers = models.TextField(null=True, blank=True)
     vehicle_type = models.CharField(db_column='vehicletype',max_length=255, default="car", null=True, blank=True)
+    id = models.CharField(db_column='ID',max_length=255, default="null", null=True, blank=True)
+    user_mileage = models.IntegerField(db_column='user_mileage',max_length=255, null=True, blank=True)
+    no_of_user_mileage_entries = models.IntegerField(db_column='no_of_user_mileage_entries',max_length=255, null=True, blank=True)
 
     class Meta:
         managed = False
@@ -339,6 +342,9 @@ class IndiaBikeDatabase(models.Model):
     lucknow = models.TextField(db_column='Lucknow', blank=True, null=True)  # Field name made lowercase.
     about_model = models.TextField(db_column='About Model', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     vehicle_type = models.CharField(db_column='vehicletype',max_length=255, default="bike", null=True, blank=True)
+    id = models.CharField(db_column='ID',max_length=255, default="null", null=True, blank=True)
+    user_mileage = models.IntegerField(db_column='user_mileage', default="0", null=True, blank=True)
+    no_of_user_mileage_entries = models.IntegerField(db_column='no_of_user_mileage_entries', default="0", null=True, blank=True)
     
 
     class Meta:

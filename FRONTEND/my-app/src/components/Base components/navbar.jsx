@@ -366,6 +366,9 @@ export default function Navbar() {
 											sx={{
 												"&:hover": { bgcolor: "#252B2D", color: "white" },
 											}}
+											onClick={() => {
+												closeUserMenu();
+											}}
 										>
 											🚗 Your Garage
 										</MenuItem>

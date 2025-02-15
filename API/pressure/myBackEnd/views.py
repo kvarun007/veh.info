@@ -201,6 +201,56 @@ def add_mileage(request):
 
             # Log the received data
             print(f"Received Data - vehicleType : {vehicleType}, Brand: {brand}, Model: {model}, Version: {version}, Mileage: {mileage}, Email: {email}")
+            if vehicleType == "car":
+                model = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(make__icontains=brand,model__icontains = model,version__icontains = version).values()
+                current_mileage = model[0]["user_mileage"]
+                no_of_user_mileage_entries = model[0]["no_of_user_mileage_entries"]
+                print(f"key_transmission - {model[0]["key_transmission"]}")
+                print(f"engine - {model[0]["engine"]}")
+                print(f"id - {model[0]["id"]}")
+                print(f"user_mileageine -{current_mileage} ")
+                print(f"no_of_user_mileage_entries - {no_of_user_mileage_entries}")
+                
+                if current_mileage is None :
+                    updated_mileage =  int(mileage)
+                    print(f"updated mileage - {updated_mileage}")
+                else:
+                    
+                    updated_mileage = ((current_mileage * no_of_user_mileage_entries) + int(mileage))/(no_of_user_mileage_entries + 1)
+                    print(f"updated mileage - {updated_mileage}")
+                
+                vehicles = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(key_transmission__icontains=model[0]["key_transmission"],engine__icontains =model[0]["engine"])
+                vehicles.update(user_mileage = updated_mileage,no_of_user_mileage_entries = no_of_user_mileage_entries + 1)
+                
+                
+                # print(f"vehicel-------{vehicles[1]["id"]}")
+                # for vehicle in vehicles:
+                #     vehicle["user_mileageine"] = updated_mileage
+                #     vehicle["no_of_user_mileage_entries"] = model[0]["no_of_user_mileage_entries"] + 1
+                #     vehicle.save()
+                    
+                
+                
+                
+            if vehicleType == "bike":
+                model = IndiaBikeDatabase.objects.filter(make__icontains=brand,model__icontains = model,version__icontains = version).values()
+                current_mileage = model[0]["user_mileage"]
+                no_of_user_mileage_entries = model[0]["no_of_user_mileage_entries"]
+                # print(f"key_transmission - {model[0]["key_transmission"]}")
+                # print(f"engine - {model[0]["engine"]}")
+                print(f"id - {model[0]["id"]}")
+                print(f"user_mileageine - {model[0]["user_mileage"]}")
+                print(f"no_of_user_mileage_entries - {model[0]["no_of_user_mileage_entries"]}")
+                
+                if current_mileage is None :
+                    updated_mileage =  int(mileage)
+                    print(f"updated mileage - {updated_mileage}")
+                else:
+                    
+                    updated_mileage = ((current_mileage * no_of_user_mileage_entries) + int(mileage))/(no_of_user_mileage_entries + 1)
+                    print(f"updated mileage - {updated_mileage}")
+                vehicle = IndiaBikeDatabase.objects.filter(id__icontains = model[0]["id"]).update(user_mileage = updated_mileage,no_of_user_mileage_entries = no_of_user_mileage_entries + 1)
+                
 
             # Respond with success
             return JsonResponse({"message": "Mileage added successfully!"}, status=200)

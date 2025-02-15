@@ -1,5 +1,6 @@
 import SimpleImageSlider from "react-simple-image-slider";
 import React, { useState, useEffect } from "react";
+import AddToGarage from "../Common components/AddToGarage";
 import {
 	FaDollarSign,
 	FaGasPump,
@@ -197,6 +198,7 @@ export default function ImageSliderBike({ vehicleData }) {
 										)
 								)}
 							</div>
+							<AddToGarage vehicleData={vehicleData} />
 						</div>
 					) : (
 						<div className="text-center text-gray-500">

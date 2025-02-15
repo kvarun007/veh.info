@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+// funtion to get the user detail for local store
 const loadUserFromStorage = () => {
 	try {
 		const userData = localStorage.getItem("User");

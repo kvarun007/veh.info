@@ -1,7 +1,6 @@
 import SimpleImageSlider from "react-simple-image-slider";
 import React, { useState, useEffect } from "react";
-import Paper from "@mui/material/Paper";
-
+import AddToGarage from "../Common components/AddToGarage";
 import {
 	FaDollarSign,
 	FaGasPump,
@@ -118,7 +117,7 @@ export default function ImageSlider({ vehicleData }) {
 						<h1 className="text-3xl font-bold text-blue-700 text-center">
 							{vehicleData[0].make} {vehicleData[0].model}
 						</h1>
-						<div className="space-y-4 divide-y divide-gray-200">
+						<div className="space-y-4 divide-y divide-gray-200 ">
 							{[
 								{
 									icon: FaDollarSign,
@@ -188,6 +187,7 @@ export default function ImageSlider({ vehicleData }) {
 									)
 							)}
 						</div>
+						<AddToGarage vehicleData={vehicleData} />
 					</div>
 				) : (
 					<div className="text-center text-gray-500">
