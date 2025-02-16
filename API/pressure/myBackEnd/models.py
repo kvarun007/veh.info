@@ -224,7 +224,7 @@ class IndiaCarDatabaseByTeoalidaFullSpecsSample(models.Model):
     vehicle_type = models.CharField(db_column='vehicletype',max_length=255, default="car", null=True, blank=True)
     id = models.CharField(db_column='ID',max_length=255, default="null", null=True, blank=True)
     user_mileage = models.IntegerField(db_column='user_mileage',max_length=255, null=True, blank=True)
-    no_of_user_mileage_entries = models.IntegerField(db_column='no_of_user_mileage_entries',max_length=255, null=True, blank=True)
+    no_of_user_mileage_entries = models.IntegerField(db_column='no_of_user_mileage_entries', null=True, blank=True)
 
     class Meta:
         managed = False
@@ -351,3 +351,12 @@ class IndiaBikeDatabase(models.Model):
         managed = False
         db_table = 'india_bike_database'
 
+class UserDatabase(models.Model):
+    usergmail = models.CharField(db_column='usergmail', blank=True, null=True,max_length=255)  # VARCHAR(255), NOT NULL
+    vehicletype = models.CharField(db_column='vehicletype', blank=True, null=True,max_length=100)  # VARCHAR(100), NOT NULL
+    id = models.CharField(db_column='id', blank=True,max_length=255, primary_key=True)  # VARCHAR(255), NOT NULL (assuming it's a unique ID)
+    user_mileage = models.IntegerField(db_column='user_mileage', blank=True, null=True, ) 
+
+    class Meta:
+        managed = False
+        db_table = 'userdata'

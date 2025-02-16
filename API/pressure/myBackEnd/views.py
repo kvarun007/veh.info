@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import IndiaCarDatabaseByTeoalidaFullSpecsSample
 from .models import IndiaBikeDatabase
+from .models import UserDatabase
 from django.shortcuts import get_object_or_404
 import json
 from rest_framework.decorators import api_view
@@ -198,6 +199,7 @@ def add_mileage(request):
             version = data.get("version")
             mileage = data.get("mileage")
             email = data.get("email")
+            print(email)
 
             # Log the received data
             print(f"Received Data - vehicleType : {vehicleType}, Brand: {brand}, Model: {model}, Version: {version}, Mileage: {mileage}, Email: {email}")
@@ -205,11 +207,6 @@ def add_mileage(request):
                 model = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(make__icontains=brand,model__icontains = model,version__icontains = version).values()
                 current_mileage = model[0]["user_mileage"]
                 no_of_user_mileage_entries = model[0]["no_of_user_mileage_entries"]
-                print(f"key_transmission - {model[0]["key_transmission"]}")
-                print(f"engine - {model[0]["engine"]}")
-                print(f"id - {model[0]["id"]}")
-                print(f"user_mileageine -{current_mileage} ")
-                print(f"no_of_user_mileage_entries - {no_of_user_mileage_entries}")
                 
                 if current_mileage is None :
                     updated_mileage =  int(mileage)
@@ -222,25 +219,13 @@ def add_mileage(request):
                 vehicles = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(key_transmission__icontains=model[0]["key_transmission"],engine__icontains =model[0]["engine"])
                 vehicles.update(user_mileage = updated_mileage,no_of_user_mileage_entries = no_of_user_mileage_entries + 1)
                 
-                
-                # print(f"vehicel-------{vehicles[1]["id"]}")
-                # for vehicle in vehicles:
-                #     vehicle["user_mileageine"] = updated_mileage
-                #     vehicle["no_of_user_mileage_entries"] = model[0]["no_of_user_mileage_entries"] + 1
-                #     vehicle.save()
-                    
-                
-                
+                UserDatabase(usergmail=email, vehicletype="Car", id=f"{brand}-{data.get("model")}-{version}",user_mileage =mileage).save()
                 
             if vehicleType == "bike":
                 model = IndiaBikeDatabase.objects.filter(make__icontains=brand,model__icontains = model,version__icontains = version).values()
                 current_mileage = model[0]["user_mileage"]
                 no_of_user_mileage_entries = model[0]["no_of_user_mileage_entries"]
-                # print(f"key_transmission - {model[0]["key_transmission"]}")
-                # print(f"engine - {model[0]["engine"]}")
-                print(f"id - {model[0]["id"]}")
-                print(f"user_mileageine - {model[0]["user_mileage"]}")
-                print(f"no_of_user_mileage_entries - {model[0]["no_of_user_mileage_entries"]}")
+                
                 
                 if current_mileage is None :
                     updated_mileage =  int(mileage)
@@ -250,7 +235,7 @@ def add_mileage(request):
                     updated_mileage = ((current_mileage * no_of_user_mileage_entries) + int(mileage))/(no_of_user_mileage_entries + 1)
                     print(f"updated mileage - {updated_mileage}")
                 vehicle = IndiaBikeDatabase.objects.filter(id__icontains = model[0]["id"]).update(user_mileage = updated_mileage,no_of_user_mileage_entries = no_of_user_mileage_entries + 1)
-                
+                UserDatabase(usergmail=email, vehicletype="bike", id=f"{brand}-{data.get("model")}-{version}",user_mileage =mileage).save()
 
             # Respond with success
             return JsonResponse({"message": "Mileage added successfully!"}, status=200)
@@ -301,19 +286,28 @@ def vehicle_detail(request,vehicle_name):
     # print(vehicles)
     return JsonResponse({'vehicle': vehicles})
 
+@api_view(["GET"])
+def get_MyGarage_Vehicle(request):
+    query = request.GET.get("gmail")
+    # print(f"gmail- {query}")
+    garage_cars = UserDatabase.objects.filter(usergmail = query,vehicletype ='Car').values()
+    garage_bikes = UserDatabase.objects.filter(usergmail = query,vehicletype ='bike').values()
+    # print(garage_vehicles)
+    return JsonResponse({"cars" : list(garage_cars), "bikes" : list(garage_bikes)})
+
 
 
 class UpdateCarDetailsView(APIView):
     def post(self, request):
         # Extract data from the request
-        print("cameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        # print("cameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         vin_number = request.data.get("vin_number")
         user_predicted_mileage = request.data.get("user_predicted_mileage")
         car_version = request.data.get("car_version")  # Assuming you use the ID to identify the car
         car_model = request.data.get("car_model")
-        print(vin_number)
-        print(user_predicted_mileage)
-        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        # print(vin_number)
+        # print(user_predicted_mileage)
+        # print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 
         # Validate input data
         if not car_version:

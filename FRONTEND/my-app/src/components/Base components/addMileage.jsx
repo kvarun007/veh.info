@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { Button } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function AddMileage() {
 	const [mileageInput, setMileageInput] = useState("");
@@ -19,7 +20,8 @@ export default function AddMileage() {
 	const [vehicleVersion, setVehicleVersion] = useState([]); //To store the vehicle version
 
 	const [userEnteredMileage, setUserEnteredMileage] = useState("");
-	const [userDetails, setUserDetails] = useState(null);
+	// const [userDetails, setUserDetails] = useState(null);
+	const user = useSelector((state) => state.user);
 
 	const fetchVehicleBrand = async (type) => {
 		try {
@@ -65,17 +67,17 @@ export default function AddMileage() {
 		}
 	};
 
-	const handleSuccess = async (response) => {
-		const { credential } = response;
+	// const handleSuccess = async (response) => {
+	// 	const { credential } = response;
 
-		if (credential) {
-			// console.log("fetching data from the google api");
-			const decodedUser = jwtDecode(credential); // Decode JWT
-			setUserDetails(decodedUser);
-			console.log("Decoded User:", decodedUser.email);
-			// setUser(decodedUser);
-		}
-	};
+	// 	if (credential) {
+	// 		// console.log("fetching data from the google api");
+	// 		const decodedUser = jwtDecode(credential); // Decode JWT
+	// 		setUserDetails(decodedUser);
+	// 		console.log("Decoded User:", decodedUser.email);
+	// 		// setUser(decodedUser);
+	// 	}
+	// };
 
 	const handleFailure = (error) => {
 		alert("failed login to google");
@@ -96,7 +98,7 @@ export default function AddMileage() {
 						model: selectedVehicleModel,
 						version: selectedVehicleVersion,
 						mileage: userEnteredMileage,
-						// email: userDetails.email,
+						email: user.email,
 					}),
 				}
 			);
