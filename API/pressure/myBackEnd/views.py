@@ -101,7 +101,8 @@ def get_cars_versions(request):
     
     brand = request.GET.get("brand")
     model = request.GET.get("model")
-    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(make__icontains=brand,model__icontains = model) \
+    print(model)
+    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(make__exact=brand,model__exact = model) \
         .values('version').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
     
     cars_data = []
@@ -109,6 +110,7 @@ def get_cars_versions(request):
         cars_data.append({
             'version' : car['version']
         })
+    print (cars_data)
     return JsonResponse({'cars': cars_data})
 
 
@@ -117,7 +119,7 @@ def get_cars_versions(request):
 def get_bikes_versions(request):
     brand = request.GET.get("brand")
     model = request.GET.get("model")
-    bikes = IndiaBikeDatabase.objects.filter(make__icontains=brand,model__icontains = model) \
+    bikes = IndiaBikeDatabase.objects.filter(make__exact=brand,model__exact = model) \
         .values('version').exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
     
     bikes_data = []
@@ -218,7 +220,7 @@ def add_mileage(request):
                 
                 vehicles = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(key_transmission__icontains=model[0]["key_transmission"],engine__icontains =model[0]["engine"])
                 vehicles.update(user_mileage = updated_mileage,no_of_user_mileage_entries = no_of_user_mileage_entries + 1)
-                
+                print(data.get("model"))
                 UserDatabase(usergmail=email, vehicletype="Car", id=f"{brand}-{data.get("model")}-{version}",user_mileage =mileage).save()
                 
             if vehicleType == "bike":
@@ -290,10 +292,29 @@ def vehicle_detail(request,vehicle_name):
 def get_MyGarage_Vehicle(request):
     query = request.GET.get("gmail")
     # print(f"gmail- {query}")
-    garage_cars = UserDatabase.objects.filter(usergmail = query,vehicletype ='Car').values()
-    garage_bikes = UserDatabase.objects.filter(usergmail = query,vehicletype ='bike').values()
-    # print(garage_vehicles)
+    garage_cars_id = list(UserDatabase.objects.filter(usergmail = query,vehicletype ='Car').values("id"))
+    garage_bikes_id = UserDatabase.objects.filter(usergmail = query,vehicletype ='bike').values("id")
+    # print(garage_cars)
+    
+    garage_cars_id_array  = []
+    for x in garage_cars_id:
+        garage_cars_id_array.append(x["id"])
+    
+    garage_bikes_id_array  = []
+    for x in garage_bikes_id:
+        garage_bikes_id_array.append(x["id"])
+        
+    print(garage_cars_id_array)
+    print(garage_bikes_id_array)
+        
+    garage_cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(id__in =garage_cars_id_array).values()
+    # print(garage_cars)
+    
+    garage_bikes = IndiaBikeDatabase.objects.filter(id__in =garage_bikes_id_array).values()
+    # print(garage_bikes)
+
     return JsonResponse({"cars" : list(garage_cars), "bikes" : list(garage_bikes)})
+
 
 
 
