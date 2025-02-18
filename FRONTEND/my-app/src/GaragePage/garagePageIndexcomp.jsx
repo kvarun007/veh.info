@@ -27,17 +27,31 @@ export default function GaragePageIndexComp() {
 		}
 	};
 
+	const handle_delete_vehicle_form_garage = async (vehicleId, vehicleType) => {
+		try {
+			const response = await fetch(
+				`http://127.0.0.1:8000/api/deltevehiclefromgarage?vehicleId=${vehicleId}&vehicleType=${vehicleType}&user=${user.email}`
+			);
+			const result = await response.json();
+
+			console.log(result.message);
+			alert(result.message);
+			fetchAllVehiclesFromGarage();
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	useEffect(() => {
 		fetchAllVehiclesFromGarage();
 	}, []);
 
 	return (
-		<>
-			<div className="empty div bg-[#141B29] min-h-16"></div>
-			<div className="max-w-6xl mx-auto p-4">
+		<div className="min-h-[90svh]">
+			<div className="empty div bg-[#141B29] min-h-16 "></div>
+			<div className="max-w-6xl mx-auto p-4 mt-10">
 				<Typography
 					variant="h4"
-					className="text-center mb-8 font-semibold text-white"
+					className="text-center mb-8 font-semibold text-black"
 				>
 					Welcome to {user.name}'s Garage
 				</Typography>
@@ -50,6 +64,13 @@ export default function GaragePageIndexComp() {
 									<IconButton
 										className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 hover:bg-white rounded-full p-1"
 										aria-label="delete"
+										onClick={() => {
+											// console.log(item.vehicle_type, item.id);
+											handle_delete_vehicle_form_garage(
+												item.id,
+												item.vehicle_type
+											);
+										}}
 									>
 										<Delete className="text-red-500" />
 									</IconButton>
@@ -85,6 +106,6 @@ export default function GaragePageIndexComp() {
 					)}
 				</Grid>
 			</div>
-		</>
+		</div>
 	);
 }

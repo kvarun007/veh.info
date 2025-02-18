@@ -16,7 +16,7 @@ export default function IndexPage() {
 					<div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
 					<div className="absolute inset-0 flex items-end justify-center pb-16">
 						<h1 className="text-4xl font-bold text-white text-center">
-							Explore Your Next Car
+							Explore Your Next Vehicle
 						</h1>
 					</div>
 				</div>

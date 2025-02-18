@@ -129,6 +129,33 @@ def get_bikes_versions(request):
         })
     return JsonResponse({'bikes': bikes_data})
 
+@api_view(["get"])
+def del_vehicle_from_garage(request):
+    vehicleId = request.GET.get("vehicleId")
+    vehicleType = request.GET.get("vehicleType")
+    email = request.GET.get("user")
+    print(f"{vehicleType} --- {vehicleId} ----- {email}")
+    mileage_from_userTable = UserDatabase.objects.filter(id =vehicleId,usergmail =email).values("user_mileage")[0]["user_mileage"]
+    # print(mileage)
+    if vehicleType == "car":
+        car = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(id__exact = vehicleId).values("user_mileage","no_of_user_mileage_entries")
+        updated_mileage = ((car[0]["user_mileage"] * car[0]["no_of_user_mileage_entries"]) - mileage_from_userTable) /(car[0]["no_of_user_mileage_entries"] - 1)
+        print(updated_mileage)
+        IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(id__exact = vehicleId).update(user_mileage = updated_mileage, no_of_user_mileage_entries  = car[0]["no_of_user_mileage_entries"] -1)
+        
+    elif vehicleType == "bike":
+        bike = IndiaBikeDatabase.objects.filter(id__exact = vehicleId).values("user_mileage","no_of_user_mileage_entries")
+        updated_mileage = ((bike[0]["user_mileage"] * bike[0]["no_of_user_mileage_entries"]) - mileage_from_userTable) /(bike[0]["no_of_user_mileage_entries"] - 1)
+        print(updated_mileage)
+        IndiaBikeDatabase.objects.filter(id__exact = vehicleId).update(user_mileage = updated_mileage, no_of_user_mileage_entries  = bike[0]["no_of_user_mileage_entries"] -1)
+        
+    
+    UserDatabase.objects.filter(id =vehicleId,usergmail =email).delete()
+    return Response({"message": "Vehicle deleted successfully"}, status=200)
+        
+        
+
+
 # def get_all_cars_details(request):
 #     cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', "image_url","version").exclude(model__regex=r'\[\d{4}-\d{4}\]').distinct()
     
