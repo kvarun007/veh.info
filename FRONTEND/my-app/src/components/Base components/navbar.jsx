@@ -159,7 +159,7 @@ export default function Navbar() {
 	// const dispatch = useDispatch();
 
 	// Modal state for adding mileage
-	const [openMileageModal, setOpenMileageModal] = useState(false);
+	// const [openMileageModal, setOpenMileageModal] = useState(false);
 
 	const handleMileageSubmit = async () => {
 		// try {
@@ -204,7 +204,7 @@ export default function Navbar() {
 	const [anchorEl, setAnchorEl] = useState(null); // State to control dropdown
 
 	const openUserMenuOptions = Boolean(anchorEl); // Check if menu is open
-	//redux state of user details
+	//redux state to details
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 	const setUser = (data) =>
@@ -306,7 +306,7 @@ export default function Navbar() {
 							)}
 						</Search>
 
-						<IconButton
+						{/* <IconButton
 							variant="contained"
 							color="inherit"
 							onClick={() => setOpenMileageModal(true)}
@@ -340,7 +340,7 @@ export default function Navbar() {
 							>
 								Add Mileage
 							</Typography>
-						</IconButton>
+						</IconButton> */}
 						<IconButton size="large" color="inherit">
 							<AccountCircle sx={{ fontSize: 40 }} onClick={openUserMenu} />
 						</IconButton>
@@ -392,7 +392,7 @@ export default function Navbar() {
 					</Toolbar>
 				</AppBar>
 
-				{/* mileage submit modal */}
+				{/* mileage submit modal
 				<Modal
 					open={openMileageModal}
 					onClose={() => setOpenMileageModal(false)}
@@ -400,7 +400,7 @@ export default function Navbar() {
 					aria-describedby="add-mileage-description"
 				>
 					<AddMileage />
-				</Modal>
+				</Modal> */}
 			</Box>
 		</div>
 	);

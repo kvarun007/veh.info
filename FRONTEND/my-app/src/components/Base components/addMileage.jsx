@@ -22,6 +22,15 @@ export default function AddMileage() {
 	const [userEnteredMileage, setUserEnteredMileage] = useState("");
 	// const [userDetails, setUserDetails] = useState(null);
 	const user = useSelector((state) => state.user);
+	const openMileageModal = useSelector((state) => state.openMileageModal);
+
+	//redux state to close add vehicle model
+	const dispatch = useDispatch();
+	const setOpenMileageModal = (data) =>
+		dispatch({
+			type: "SET_OPEN_MILEAGE_MODAL",
+			payload: data,
+		});
 
 	const fetchVehicleBrand = async (type) => {
 		try {
@@ -104,6 +113,8 @@ export default function AddMileage() {
 			);
 			if (response.ok) {
 				alert("Mileage added successfully!");
+				setOpenMileageModal(false);
+
 				// setOpenMileageModal(false);
 			} else {
 				alert("Failed to add mileage.");

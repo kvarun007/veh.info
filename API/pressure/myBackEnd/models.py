@@ -360,3 +360,30 @@ class UserDatabase(models.Model):
     class Meta:
         managed = False
         db_table = 'userdata'
+        
+        
+class PopularSearchedCar(models.Model):
+    id = models.CharField(max_length=100, primary_key=True,db_column='id')  
+    make = models.CharField(max_length=100,db_column='Make')
+    model = models.CharField(max_length=100,db_column='Model')
+    image_url = models.TextField(db_column='Image_URL')
+    price = models.FloatField(db_column='Price')
+    count = models.IntegerField(db_column='Count')
+    created_at = models.DateTimeField(auto_now_add=True,db_column='created_at') 
+
+    class Meta:
+        managed = False
+        db_table = 'popular_searched_cars'
+        
+class PopularSearchedbike(models.Model):
+    id = models.CharField(max_length=100, primary_key=True,db_column='id')  
+    make = models.CharField(max_length=100,db_column='Make')
+    model = models.CharField(max_length=100,db_column='Model')
+    image_url = models.TextField(db_column='Image_URL')
+    price = models.IntegerField(db_column='Price')
+    count = models.IntegerField(db_column='Count')
+    created_at = models.DateTimeField(auto_now_add=True,db_column='created_at') 
+
+    class Meta:
+        managed = False
+        db_table = 'popular_searched_bikes'

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
 	Card,
 	CardContent,
@@ -7,12 +7,29 @@ import {
 	IconButton,
 	CardMedia,
 	Grid,
+	CircularProgress,
+	Box,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import AddMileage from "../components/Base components/addMileage";
+import Modal from "@mui/material/Modal";
+import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
+import GarageIcon from "@mui/icons-material/Garage";
 
 export default function GaragePageIndexComp() {
 	const user = useSelector((state) => state.user);
+	const openMileageModal = useSelector((state) => state.openMileageModal);
+
 	const [garageVehicles, setGarageVehicles] = useState(null);
+	// const [openMileageModal, setOpenMileageModal] = useState(false);
+
+	//redux state to close add vehicle model
+	const dispatch = useDispatch();
+	const setOpenMileageModal = (data) =>
+		dispatch({
+			type: "SET_OPEN_MILEAGE_MODAL",
+			payload: data,
+		});
 
 	const fetchAllVehiclesFromGarage = async () => {
 		try {
@@ -41,31 +58,66 @@ export default function GaragePageIndexComp() {
 			console.log(error);
 		}
 	};
+
 	useEffect(() => {
 		fetchAllVehiclesFromGarage();
 	}, []);
 
 	return (
-		<div className="min-h-[90svh]">
-			<div className="empty div bg-[#141B29] min-h-16 "></div>
+		<div className="min-h-[90svh] bg-gray-50">
+			<div className="empty div bg-[#141B29] min-h-16"></div>
 			<div className="max-w-6xl mx-auto p-4 mt-10">
 				<Typography
 					variant="h4"
-					className="text-center mb-8 font-semibold text-black"
+					className="text-center mb-8 font-semibold text-gray-800"
 				>
 					Welcome to {user.name}'s Garage
 				</Typography>
-				<Grid container spacing={4}>
+				<IconButton
+					variant="contained"
+					color="inherit"
+					onClick={() => setOpenMileageModal(true)}
+					sx={{
+						color: "inherit",
+						marginLeft: "16px",
+						display: "flex",
+						alignItems: "center",
+						gap: "8px",
+						borderRadius: 0,
+						border: "none",
+						outline: "none",
+						backgroundColor: "transparent",
+						":hover": {
+							backgroundColor: "transparent",
+							border: "none",
+						},
+						":focus": {
+							border: "none",
+							outline: "none",
+							backgroundColor: "transparent",
+						},
+					}}
+				>
+					<GarageIcon />
+					<Typography
+						variant="button"
+						sx={{
+							fontWeight: 500,
+						}}
+					>
+						Add Vehicle To Garage
+					</Typography>
+				</IconButton>
+				<Grid container spacing={4} className="mt-4">
 					{garageVehicles ? (
 						garageVehicles.map((item, index) => (
 							<Grid item xs={12} sm={6} md={4} key={index}>
-								<Card className="shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300 relative group">
+								<Card className="shadow-lg rounded-xl hover:shadow-2xl transition-shadow duration-300 relative group">
 									{/* Delete Button */}
 									<IconButton
 										className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 hover:bg-white rounded-full p-1"
 										aria-label="delete"
 										onClick={() => {
-											// console.log(item.vehicle_type, item.id);
 											handle_delete_vehicle_form_garage(
 												item.id,
 												item.vehicle_type
@@ -100,11 +152,39 @@ export default function GaragePageIndexComp() {
 							</Grid>
 						))
 					) : (
-						<Typography variant="body1" className="text-center text-white">
-							Loading...
-						</Typography>
+						<Box
+							display="flex"
+							justifyContent="center"
+							alignItems="center"
+							width="100%"
+							height="200px"
+						>
+							<CircularProgress />
+						</Box>
 					)}
 				</Grid>
+				{/* mileage submit modal */}
+				<Modal
+					open={openMileageModal}
+					onClose={() => setOpenMileageModal(false)}
+					aria-labelledby="add-mileage-title"
+					aria-describedby="add-mileage-description"
+				>
+					<Box
+						sx={{
+							position: "absolute",
+							top: "50%",
+							left: "50%",
+							transform: "translate(-50%, -50%)",
+							width: 400,
+							bgcolor: "background.paper",
+							boxShadow: 24,
+							p: 4,
+						}}
+					>
+						<AddMileage />
+					</Box>
+				</Modal>
 			</div>
 		</div>
 	);

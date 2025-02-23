@@ -3,6 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from .models import IndiaCarDatabaseByTeoalidaFullSpecsSample
 from .models import IndiaBikeDatabase
 from .models import UserDatabase
+from .models import PopularSearchedCar
+from .models import PopularSearchedbike
 from django.shortcuts import get_object_or_404
 import json
 from rest_framework.decorators import api_view
@@ -12,35 +14,41 @@ from rest_framework import status
 from .serializers import VehicleSerializer
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F
 
 # Create your views here.
 # get_all_cars function return all the cars used for the index pages 
-def get_all_cars(request):
-    cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', 'image_url', 'price').exclude(model__regex=r'\[\d{4}-\d{4}\]')
+# def get_all_cars(request):
+#     cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', 'image_url', 'price').exclude(model__regex=r'\[\d{4}-\d{4}\]')
     
-    # Dictionary to store the lowest price for each unique combination of make, model, and image_url
-    lowest_price_cars = {}
+#     # Dictionary to store the lowest price for each unique combination of make, model, and image_url
+#     lowest_price_cars = {}
 
-    for car in cars:
-        key = (car['make'], car['model'])  # Unique key for each combination
-        price = float(car['price'].replace("?","").replace("Lakh","").strip())
+#     for car in cars:
+#         key = (car['make'], car['model'])  # Unique key for each combination
+#         price = float(car['price'].replace("?","").replace("Lakh","").strip())
 
-        # If the key is not in the dictionary or the current price is lower, update the dictionary
-        if key not in lowest_price_cars or price < float(lowest_price_cars[key]['price'].replace("Lakh","").strip()):
+#         # If the key is not in the dictionary or the current price is lower, update the dictionary
+#         if key not in lowest_price_cars or price < float(lowest_price_cars[key]['price'].replace("Lakh","").strip()):
             
-            print(f"{key} - {price}")
+#             # print(f"{key} - {price}")
             
-            lowest_price_cars[key] = {
-                'make': car['make'],
-                'model': car['model'],
-                'image_url': car['image_url'],
-                'price': str(price) + " Lakh" 
-            }
+#             lowest_price_cars[key] = {
+#                 'make': car['make'],
+#                 'model': car['model'],
+#                 'image_url': car['image_url'],
+#                 'price': str(price) + " Lakh" 
+#             }
 
-    # Convert the dictionary values to a list
-    cars_data = list(lowest_price_cars.values())
+#     # Convert the dictionary values to a list
+#     cars_data = list(lowest_price_cars.values())
 
-    return JsonResponse({'cars': cars_data})
+#     return JsonResponse({'cars': cars_data})
+
+def get_all_cars(request):
+    cars = list(PopularSearchedCar.objects.order_by('-count')[:3].values("make","model","price","image_url"))
+    print(cars)
+    return JsonResponse({'cars': cars},safe=False)
 
 #get_all_cars_brands fucntion retruns the all brand names of the cars 
 def get_all_cars_brands(request):
@@ -134,19 +142,19 @@ def del_vehicle_from_garage(request):
     vehicleId = request.GET.get("vehicleId")
     vehicleType = request.GET.get("vehicleType")
     email = request.GET.get("user")
-    print(f"{vehicleType} --- {vehicleId} ----- {email}")
+    # print(f"{vehicleType} --- {vehicleId} ----- {email}")
     mileage_from_userTable = UserDatabase.objects.filter(id =vehicleId,usergmail =email).values("user_mileage")[0]["user_mileage"]
     # print(mileage)
     if vehicleType == "car":
         car = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(id__exact = vehicleId).values("user_mileage","no_of_user_mileage_entries")
         updated_mileage = ((car[0]["user_mileage"] * car[0]["no_of_user_mileage_entries"]) - mileage_from_userTable) /(car[0]["no_of_user_mileage_entries"] - 1)
-        print(updated_mileage)
+        # print(updated_mileage)
         IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(id__exact = vehicleId).update(user_mileage = updated_mileage, no_of_user_mileage_entries  = car[0]["no_of_user_mileage_entries"] -1)
         
     elif vehicleType == "bike":
         bike = IndiaBikeDatabase.objects.filter(id__exact = vehicleId).values("user_mileage","no_of_user_mileage_entries")
         updated_mileage = ((bike[0]["user_mileage"] * bike[0]["no_of_user_mileage_entries"]) - mileage_from_userTable) /(bike[0]["no_of_user_mileage_entries"] - 1)
-        print(updated_mileage)
+        # print(updated_mileage)
         IndiaBikeDatabase.objects.filter(id__exact = vehicleId).update(user_mileage = updated_mileage, no_of_user_mileage_entries  = bike[0]["no_of_user_mileage_entries"] -1)
         
     
@@ -184,33 +192,8 @@ def get_all_vehicles (request):
 
 
 def get_all_bikes(request):
-    # return HttpResponse("dispalying all bikes ")
-    bikes = IndiaBikeDatabase.objects.values('make', 'model', 'image_url', 'mumbai').distinct()
-    
-     # Dictionary to store the lowest price for each unique combination of make, model, and image_url
-    lowest_price_bikes = {}
-
-    for bike in bikes:
-        key = (bike['make'], bike['model'])  # Unique key for each combination
-        price = bike['mumbai'].replace("â‚¹ ","").replace("onwards","").strip()
-        # price = bike["mumbai"]
-
-        # If the key is not in the dictionary or the current price is lower, update the dictionary
-        if key not in lowest_price_bikes or float(price.replace(',', '')) < float(lowest_price_bikes[key]['price'].replace(',', '')):
-            
-            print(f"{key} - {price}")
-            
-            lowest_price_bikes[key] = {
-                'make': bike['make'],
-                'model': bike['model'],
-                'image_url': bike['image_url'],
-                'price': price
-            }
-
-    # Convert the dictionary values to a list
-    bikes_data = list(lowest_price_bikes.values())
-
-    return JsonResponse({'bikes': bikes_data})
+    bikes = list(PopularSearchedbike.objects.order_by('-count')[:3].values("make","model","price","image_url"))
+    return JsonResponse({'bikes': bikes},safe=False)
 
 @csrf_exempt  # Disable CSRF for testing purposes (not recommended for production)
 # @api_view(["POST"])
@@ -231,7 +214,7 @@ def add_mileage(request):
             print(email)
 
             # Log the received data
-            print(f"Received Data - vehicleType : {vehicleType}, Brand: {brand}, Model: {model}, Version: {version}, Mileage: {mileage}, Email: {email}")
+            # print(f"Received Data - vehicleType : {vehicleType}, Brand: {brand}, Model: {model}, Version: {version}, Mileage: {mileage}, Email: {email}")
             if vehicleType == "car":
                 model = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(make__icontains=brand,model__icontains = model,version__icontains = version).values()
                 current_mileage = model[0]["user_mileage"]
@@ -239,15 +222,15 @@ def add_mileage(request):
                 
                 if current_mileage is None :
                     updated_mileage =  int(mileage)
-                    print(f"updated mileage - {updated_mileage}")
+                    # print(f"updated mileage - {updated_mileage}")
                 else:
                     
                     updated_mileage = ((current_mileage * no_of_user_mileage_entries) + int(mileage))/(no_of_user_mileage_entries + 1)
-                    print(f"updated mileage - {updated_mileage}")
+                    # print(f"updated mileage - {updated_mileage}")
                 
                 vehicles = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(key_transmission__icontains=model[0]["key_transmission"],engine__icontains =model[0]["engine"])
                 vehicles.update(user_mileage = updated_mileage,no_of_user_mileage_entries = no_of_user_mileage_entries + 1)
-                print(data.get("model"))
+                # print(data.get("model"))
                 UserDatabase(usergmail=email, vehicletype="Car", id=f"{brand}-{data.get("model")}-{version}",user_mileage =mileage).save()
                 
             if vehicleType == "bike":
@@ -258,11 +241,11 @@ def add_mileage(request):
                 
                 if current_mileage is None :
                     updated_mileage =  int(mileage)
-                    print(f"updated mileage - {updated_mileage}")
+                    # print(f"updated mileage - {updated_mileage}")
                 else:
                     
                     updated_mileage = ((current_mileage * no_of_user_mileage_entries) + int(mileage))/(no_of_user_mileage_entries + 1)
-                    print(f"updated mileage - {updated_mileage}")
+                    # print(f"updated mileage - {updated_mileage}")
                 vehicle = IndiaBikeDatabase.objects.filter(id__icontains = model[0]["id"]).update(user_mileage = updated_mileage,no_of_user_mileage_entries = no_of_user_mileage_entries + 1)
                 UserDatabase(usergmail=email, vehicletype="bike", id=f"{brand}-{data.get("model")}-{version}",user_mileage =mileage).save()
 
@@ -301,7 +284,7 @@ class VehicleSearchSuggestions(APIView):
             bikes = IndiaBikeDatabase.objects.filter(Q(make__icontains=query) | Q(model__icontains=query)).values('make', 'model').distinct()[:10 ]
             
             vehicles = [*cars, *bikes]
-            print(vehicles)
+            # print(vehicles)
             serializer = VehicleSerializer(vehicles, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"suggestions": []}, status=status.HTTP_200_OK)
@@ -310,7 +293,47 @@ class VehicleSearchSuggestions(APIView):
         
 def vehicle_detail(request,vehicle_name):
     cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(model = vehicle_name).values()
+    
+    if(cars):
+        cars_price_array = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(model = vehicle_name).values('make', 'model', 'image_url',"price")
+        # print(cars_price_array[0]["price"].replace("?","").replace("Lakh",""))
+        make = cars_price_array[0]["make"]
+        model = cars_price_array[0]["model"]
+        image_url = cars_price_array[0]["image_url"]
+        lowest_price = float(cars_price_array[0]["price"].replace("?","").replace("Lakh",""))
+        for car_price in cars_price_array:
+            if float(car_price["price"].replace("?","").replace("Lakh","")) < lowest_price :
+                lowest_price = float(car_price["price"].replace("?","").replace("Lakh",""))
+        # print(f"{lowest_price}, {make}, {model}, {image_url}")
+        
+        popular_search_cars = PopularSearchedCar.objects.filter(id= f"{make}_{model}")
+        if len(popular_search_cars) == 0:
+            # print("dfgjdsklfdkljfjkldsfjkldkjl")
+            PopularSearchedCar.objects.create(make = make,model = model,image_url = image_url,price =lowest_price, id= f"{make}_{model}", count = 1)
+        else:
+            PopularSearchedCar.objects.filter(id=f"{make}_{model}").update(count=F('count') + 1)
+    
     bikes = IndiaBikeDatabase.objects.filter(model = vehicle_name).values()
+    
+    if(bikes):
+        bikes_price_array = IndiaBikeDatabase.objects.filter(model = vehicle_name).values('make', 'model', 'image_url',"mumbai")
+        # print(bikes_price_array[0]["mumbai"].replace("â‚¹","").replace("onwards",""))
+        make = bikes_price_array[0]["make"]
+        model = bikes_price_array[0]["model"]
+        image_url = bikes_price_array[0]["image_url"]
+        lowest_price = int(bikes_price_array[0]["mumbai"].replace("â‚¹","").replace("onwards","").replace(",",""))
+        for bike_price in bikes_price_array:
+            if int(bike_price["mumbai"].replace("â‚¹","").replace("onwards","").replace(",","")) < lowest_price :
+                lowest_price = int(bike_price["mumbai"].replace("â‚¹","").replace("onwards","").replace(",",""))
+        print(f"{lowest_price}, {make}, {model}, {image_url}")
+        
+        popular_search_bikes =  PopularSearchedbike.objects.filter(id= f"{make}_{model}")
+        if len(popular_search_bikes) == 0:
+            # print("dfgjdsklfdkljfjkldsfjkldkjl")
+            PopularSearchedbike.objects.create(make = make,model = model,image_url = image_url,price =lowest_price, id= f"{make}_{model}", count = 1)
+        else:
+            PopularSearchedbike.objects.filter(id=f"{make}_{model}").update(count=F('count') + 1)
+        
     vehicles = [*cars, *bikes]
     # print(vehicles)
     return JsonResponse({'vehicle': vehicles})
@@ -331,8 +354,8 @@ def get_MyGarage_Vehicle(request):
     for x in garage_bikes_id:
         garage_bikes_id_array.append(x["id"])
         
-    print(garage_cars_id_array)
-    print(garage_bikes_id_array)
+    # print(garage_cars_id_array)
+    # print(garage_bikes_id_array)
         
     garage_cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.filter(id__in =garage_cars_id_array).values()
     # print(garage_cars)
