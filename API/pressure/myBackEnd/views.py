@@ -18,33 +18,6 @@ from django.db.models import F
 
 # Create your views here.
 # get_all_cars function return all the cars used for the index pages 
-# def get_all_cars(request):
-#     cars = IndiaCarDatabaseByTeoalidaFullSpecsSample.objects.values('make', 'model', 'image_url', 'price').exclude(model__regex=r'\[\d{4}-\d{4}\]')
-    
-#     # Dictionary to store the lowest price for each unique combination of make, model, and image_url
-#     lowest_price_cars = {}
-
-#     for car in cars:
-#         key = (car['make'], car['model'])  # Unique key for each combination
-#         price = float(car['price'].replace("?","").replace("Lakh","").strip())
-
-#         # If the key is not in the dictionary or the current price is lower, update the dictionary
-#         if key not in lowest_price_cars or price < float(lowest_price_cars[key]['price'].replace("Lakh","").strip()):
-            
-#             # print(f"{key} - {price}")
-            
-#             lowest_price_cars[key] = {
-#                 'make': car['make'],
-#                 'model': car['model'],
-#                 'image_url': car['image_url'],
-#                 'price': str(price) + " Lakh" 
-#             }
-
-#     # Convert the dictionary values to a list
-#     cars_data = list(lowest_price_cars.values())
-
-#     return JsonResponse({'cars': cars_data})
-
 def get_all_cars(request):
     cars = list(PopularSearchedCar.objects.order_by('-count')[:3].values("make","model","price","image_url"))
     print(cars)
@@ -364,9 +337,6 @@ def get_MyGarage_Vehicle(request):
     # print(garage_bikes)
 
     return JsonResponse({"cars" : list(garage_cars), "bikes" : list(garage_bikes)})
-
-
-
 
 class UpdateCarDetailsView(APIView):
     def post(self, request):

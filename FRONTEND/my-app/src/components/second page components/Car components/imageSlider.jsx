@@ -68,6 +68,7 @@ export default function ImageSlider({ vehicleData }) {
 	}
 
 	useEffect(() => {
+		console.log("Vehicle Data:", vehicleData);
 		if (vehicleData && vehicleData.length > 0) {
 			const vehicle = vehicleData[0];
 			const formattedImages = vehicle.image_url
@@ -92,6 +93,7 @@ export default function ImageSlider({ vehicleData }) {
 					// <div className="p-4 bg-white rounded-lg shadow-md border border-[#1976D2] ">
 					<div className="w-full aspect-w-16 aspect-h-9  ">
 						<SimpleImageSlider
+							key={images.length}
 							width="100%"
 							height="100%"
 							images={images}
@@ -187,7 +189,6 @@ export default function ImageSlider({ vehicleData }) {
 									)
 							)}
 						</div>
-						<AddToGarage vehicleData={vehicleData} />
 					</div>
 				) : (
 					<div className="text-center text-gray-500">

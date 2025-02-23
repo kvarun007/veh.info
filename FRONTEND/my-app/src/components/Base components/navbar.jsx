@@ -257,7 +257,7 @@ export default function Navbar() {
 							component="div"
 							sx={{ flexGrow: 1, display: {} }}
 						>
-							VEHICE.INFO
+							<Link to={`/`}>VEHICE.INFO</Link>
 						</Typography>
 
 						<Search ref={refSuggestionList}>

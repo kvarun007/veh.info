@@ -7,12 +7,15 @@ import OnRoadPriceCard from "../Common components/onRoadPrice";
 import ImageSliderBike from "../Bike components/ImageSliderBike";
 import BasicBikeFeatures from "../Bike components/BasicBikeFeatures";
 import VariantsBike from "../Bike components/variantsBike";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function VehiclePages() {
 	const params = useParams();
 	// console.log(params.userId);
 
 	const [vehicleData, setVehicleData] = useState();
+	const dispatch = useDispatch();
+	const setAllVehicle = () => dispatch({ type: "all" });
 
 	const fetchAllVehicles = async () => {
 		try {
@@ -20,8 +23,9 @@ export default function VehiclePages() {
 				`http://127.0.0.1:8000/details/${params.vehicleModel}/`
 			);
 			const result = await response.json();
+			setAllVehicle();
 			setVehicleData(result.vehicle);
-			console.log(result.vehicle);
+			// console.log(result.vehicle);
 		} catch (error) {
 			console.error("Error fetching data:", error);
 		}
@@ -42,7 +46,7 @@ export default function VehiclePages() {
 	}, [vehicleData]);
 
 	return vehicleData && vehicleData[0].vehicle_type === "car" ? (
-		<div className="  w-100%  bg-[#F9F9F9]">
+		<div className="  w-100%  bg-[#F9F9F9] mb-4">
 			<div className=" empty div bg-[#141B29] min-h-16"> dfadfedfsa</div>
 
 			<ImageSlider vehicleData={vehicleData} />
