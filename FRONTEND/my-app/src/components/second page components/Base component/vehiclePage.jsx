@@ -47,7 +47,7 @@ export default function VehiclePages() {
 
 	return vehicleData && vehicleData[0].vehicle_type === "car" ? (
 		<div className="  w-100%  bg-[#F9F9F9] mb-4">
-			<div className=" empty div bg-[#141B29] min-h-16"> dfadfedfsa</div>
+			<div className=" empty div bg-[#141B29] min-h-16"> </div>
 
 			<ImageSlider vehicleData={vehicleData} />
 
